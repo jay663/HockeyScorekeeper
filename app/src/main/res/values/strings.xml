@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">HockeyScorekeeper</string>
+    <string name="title_activity_select_teams">SelectTeamsActivity</string>
+    <string name="button_save">Save</string>
+    <string name="hint_team_name">Team Name</string>
+    <string name="empty_not_saved">Team name is empty not saved</string>
+    <string-array name="position_array">
+        <item>C</item>
+        <item>LW</item>
+        <item>RW</item>
+        <item>D</item>
+        <item>G</item>
+    </string-array>
+    <string name="title_activity_add_player">Add Player to Team</string>
+    <string name="hint_player_name">Player Name</string>
+    <string name="hint_jersey_number">Jersey Number</string>
+    <string name="title_activity_list_of_teams">ListOfTeamsActivity</string>
+    <string name="title_activity_team_roster">TeamRosterActivity</string>
+    <string name="goal">Goal</string>
+    <string name="assist">Assist</string>
+    <string name="secondary_assist">Secondary Assist</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="title_activity_play_game">PlayGameActivity</string>
+    <string name="time_of_goal">Time of Goal</string>
+    <string name="team_location">Team Location</string>
+    <string name="delete">Delete</string>
+    <string name="undo">Undo</string>
+    <string name="title_activity_remove">RemoveActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+</resources>

@@ -1,0 +1,71 @@
+package com.scoreit.hockeyscorekeeper;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.scoreit.hockeyscorekeeper.model.Player;
+
+import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
+
+public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.PlayerViewHolder> {
+    private final LayoutInflater mInflater;
+    private List<Player> mPlayers; // Cached copy of teams
+
+    public PlayerListAdapter(Context context) {
+        mInflater = LayoutInflater.from(context);
+    }
+
+    class PlayerViewHolder extends RecyclerView.ViewHolder {
+        private final TextView playerNameView;
+        private final TextView playerJerseyView;
+        private final TextView playerPositionView;
+
+        private PlayerViewHolder(View itemView) {
+            super(itemView);
+            playerNameView = itemView.findViewById(R.id.player_name_item);
+            playerJerseyView = itemView.findViewById(R.id.player_jersey_item);
+            playerPositionView = itemView.findViewById(R.id.player_position_item);
+        }
+    }
+
+    @Override
+    public PlayerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = mInflater.inflate(R.layout.roster_player_view_item, parent, false);
+        return new PlayerViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(PlayerViewHolder holder, int position) {
+        if (mPlayers != null) {
+            Player current = mPlayers.get(position);
+            holder.playerNameView.setText(current.mPlayerName);
+            holder.playerJerseyView.setText(Integer.toString(current.mJerseyNumber));
+            holder.playerPositionView.setText(current.mPosition);
+        } else {
+            // Covers the case of data not being ready yet.
+            holder.playerNameView.setText("No Players Have Been Added");
+            holder.playerJerseyView.setText(" ");
+            holder.playerPositionView.setText(" ");
+        }
+    }
+
+    void setPlayers(List<Player> players){
+        mPlayers = players;
+        notifyDataSetChanged();
+    }
+
+
+    // getItemCount() is called many times, and when it is first called,
+    // mTeams has not been updated (means initially, it's null, and we can't return null).
+    @Override
+    public int getItemCount() {
+        if (mPlayers != null)
+            return mPlayers.size();
+        else return 0;
+    }
+}
