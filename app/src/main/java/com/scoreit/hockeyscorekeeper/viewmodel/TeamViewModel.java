@@ -17,9 +17,6 @@ public class TeamViewModel extends AndroidViewModel {
 
     private HockeyRepository mRepository;
     private LiveData<List<Team>> mAllTeams;
-//    Team[] teams = {new Team("San Jose Sharks", "Sharks", "San Jose"), new Team("Columbus Blue Jackets", "Blue Jackets", "Columbus"),
-//            new Team("Winnipeg Jets", "Jets", "Winnipeg"), new Team("Nashville Grapes", "Grapes", "Nashville")};
-
 
     public TeamViewModel (Application application) {
         super(application);
@@ -29,8 +26,8 @@ public class TeamViewModel extends AndroidViewModel {
 
     public LiveData<List<Team>> getAllTeams() { return mAllTeams; }
 
-    public Team getTeam(int teamId){
-        return mAllTeams.getValue().get(teamId);
+    public LiveData<Team> getTeam(int teamId){
+        return mRepository.getTeam(teamId);
     }
 
     public void insert(Team team, IAsyncTaskResults<Long> addTeamListener) {
@@ -38,7 +35,7 @@ public class TeamViewModel extends AndroidViewModel {
         mRepository.insert(team);
     }
 
-    public void editTeam(Team team) {
+    public void update(Team team) {
         mRepository.updateTeam(team);
     }
 

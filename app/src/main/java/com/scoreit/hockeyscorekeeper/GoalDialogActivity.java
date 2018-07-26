@@ -10,12 +10,14 @@ import com.scoreit.hockeyscorekeeper.viewmodel.PlayerViewModel;
 import com.scoreit.hockeyscorekeeper.viewmodel.TeamViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 public class GoalDialogActivity extends AppCompatActivity {
     private int mTeamId;
     private PlayerViewModel mPlayerViewModel;
     private TeamViewModel mTeamViewModel;
+    private Team mTeam;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +29,7 @@ public class GoalDialogActivity extends AppCompatActivity {
 
         mPlayerViewModel = ViewModelProviders.of(this).get(PlayerViewModel.class);
         mTeamViewModel = ViewModelProviders.of(this).get(TeamViewModel.class);
-
-        Team team = mTeamViewModel.getTeam(mTeamId);
+        mTeamViewModel.getTeam(mTeamId);
     }
 
     public void onSaveGoal(View view)
@@ -41,6 +42,33 @@ public class GoalDialogActivity extends AppCompatActivity {
         setResult(RESULT_OK, output);
         finish();
     }
+
+    private void loadTeam(int teamId) {
+        mTeamViewModel.getTeam(teamId).observe(this, new Observer<Team>() {
+            @Override
+            public void onChanged(Team team) {
+                loadTeamEditFields(team);
+            }
+        });
+
+        return;
+    }
+
+    protected void loadTeamEditFields(Team team){
+        mTeam = team;
+    }
+
+//    private Team getTeam(int teamId) {
+//        final Team[] resultTeam = {null};
+//        mTeamViewModel.getTeam(teamId).observe(this, new Observer<Team>() {
+//            @Override
+//            public void onChanged(Team team) {
+//                resultTeam[0] = team;
+//            }
+//        });
+//        return resultTeam[0];
+//    }
+
 
 
 }

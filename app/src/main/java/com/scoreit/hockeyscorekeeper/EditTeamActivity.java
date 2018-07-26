@@ -10,6 +10,7 @@ import com.scoreit.hockeyscorekeeper.model.Team;
 import com.scoreit.hockeyscorekeeper.viewmodel.TeamViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 public class EditTeamActivity extends AppCompatActivity {
@@ -31,24 +32,29 @@ public class EditTeamActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         int teamId = intent.getIntExtra(EDIT_TEAM_ID, -1);
-        mOriginalTeam = mTeamViewModel.getTeam(teamId);
 
         mEditTeamName = findViewById(R.id.edit_activity_team_name);
-        mEditTeamName.setText(mOriginalTeam.mTeamName);
-
         mEditTeamLocation = findViewById(R.id.edit_activity_team_location);
-        mEditTeamName.setText(mOriginalTeam.mLocation);
-
         mEditTeamMascot = findViewById(R.id.edit_activity_team_mascot);
-        mEditTeamName.setText(mOriginalTeam.mMascott);
-
+        loadTeam(teamId);
     }
 
-    protected void onCancelClick(View view){
+    private void loadTeam(int teamId) {
+        mTeamViewModel.getTeam(teamId).observe(this, new Observer<Team>() {
+            @Override
+            public void onChanged(Team team) {
+                loadTeamEditFields(team);
+            }
+        });
+
+        return;
+    }
+
+    public void onEditTeamCancelClick(View view){
         finish();
     }
 
-    protected void onSaveTeamClick(View view){
+    public void onEditTeamSaveTeamClick(View view) {
         Intent replyIntent = new Intent();
         if (TextUtils.isEmpty(mEditTeamName.getText())) {
             setResult(RESULT_CANCELED, replyIntent);
@@ -57,9 +63,18 @@ public class EditTeamActivity extends AppCompatActivity {
             String teamLocation = mEditTeamLocation.getText().toString();
             String teamMascot = mEditTeamMascot.getText().toString();
             mUpdatedTeam = new Team(teamName, teamLocation, teamMascot);
-            mTeamViewModel.editTeam(mUpdatedTeam);
+            mUpdatedTeam.mTeamId = mOriginalTeam.mTeamId;
+            mTeamViewModel.update(mUpdatedTeam);
+            finish();
         }
 
+    }
+
+    protected void loadTeamEditFields(Team team){
+        mOriginalTeam = team;
+        mEditTeamName.setText(team.mTeamName);
+        mEditTeamLocation.setText(team.mLocation);
+        mEditTeamMascot.setText(team.mMascott);
     }
 
 }

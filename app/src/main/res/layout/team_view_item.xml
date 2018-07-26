@@ -1,41 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:padding="15dp"
-    android:layout_height="match_parent">
-    >
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/team_item_cl">
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:padding="5dp"
+<androidx.cardview.widget.CardView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/team_item_cl"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginTop="5dp"
+    app:cardCornerRadius="5dp">
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:weightSum="5">
-                <TextView
-                    android:id="@+id/team_item_name"
-                    style="@style/team_item_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/holo_blue_light"
-                    android:layout_weight="4"
-                    />
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
 
-                <CheckBox
-                    android:id="@+id/team_item_checkBox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="1"
-                    android:visibility="gone"
-                    android:clickable="false"/>
-        </LinearLayout>
+            <TextView
+                android:id="@+id/team_item_name"
+                style="@style/team_item_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="false"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:textStyle="bold"
+                android:textColor="#616161"/>
 
+            <CheckBox
+                android:id="@+id/team_item_checkBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@id/team_item_name"
+                android:clickable="false"
+                android:layout_alignBaseline="@id/team_item_name"
+                android:layout_alignParentRight="true"
+                android:layout_alignRight="@id/team_item_name"
+                android:layout_alignParentEnd="true"
+                android:visibility="gone"/>
+        </RelativeLayout>
 
-    </androidx.cardview.widget.CardView>
-</LinearLayout>
+</androidx.cardview.widget.CardView>
+
 
