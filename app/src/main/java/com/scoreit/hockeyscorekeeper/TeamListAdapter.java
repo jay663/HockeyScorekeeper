@@ -46,6 +46,7 @@ public class TeamListAdapter extends RecyclerView.Adapter<TeamListAdapter.TeamVi
         public final TextView teamItemView;
         public final CheckBox teamItemCheckBox;
         public final CardView teamItemCL;
+
         public View layout;
 
         private TeamViewHolder(View itemView) {
@@ -67,7 +68,8 @@ public class TeamListAdapter extends RecyclerView.Adapter<TeamListAdapter.TeamVi
     public void onBindViewHolder(TeamViewHolder holder, int position) {
         if (mTeams != null) {
             Team current = mTeams.get(position);
-            holder.teamItemView.setText(current.mTeamName);
+            String name = String.format("%s %s", current.mLocation, current.mTeamName);
+            holder.teamItemView.setText(name);
         } else {
             // Covers the case of data not being ready yet.
             holder.teamItemView.setText("No Teams Have Been Added");
@@ -90,7 +92,25 @@ public class TeamListAdapter extends RecyclerView.Adapter<TeamListAdapter.TeamVi
                     mMenu.setVisibility(View.VISIBLE);
                     mAddButton.hide();
                 }
-//                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+
+            }
+        });
+    }
+
+    void setTeams(List<Team> teams){
+        mTeams = teams;
+        notifyDataSetChanged();
+    }
+
+    public Team removeItem(int position)
+    {
+        Team team = mTeams.get(position);
+        mTeams.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, mTeams.size());
+        return team;
+
+        //                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 //                builder.setTitle("Choose option");
 //                builder.setMessage("Update roster or edit team name?");
 //                builder.setPositiveButton("Update Roster", new DialogInterface.OnClickListener() {
@@ -116,22 +136,6 @@ public class TeamListAdapter extends RecyclerView.Adapter<TeamListAdapter.TeamVi
 //                    }
 //                });
 //                builder.create().show();ß
-            }
-        });
-    }
-
-    void setTeams(List<Team> teams){
-        mTeams = teams;
-        notifyDataSetChanged();
-    }
-
-    public Team removeItem(int position)
-    {
-        Team team = mTeams.get(position);
-        mTeams.remove(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, mTeams.size());
-        return team;
     }
 
     public void restoreItem(Team team, int position)

@@ -42,7 +42,6 @@ public class ListOfTeamsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_teams);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //android.support.design.bottomappbar.BottomAppBar
         setSupportActionBar(toolbar);
 
         FloatingActionButton button = (FloatingActionButton) findViewById(R.id.fab);
@@ -54,8 +53,6 @@ public class ListOfTeamsActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        initializeSwipe();
-
         mTeamViewModel = ViewModelProviders.of(this).get(TeamViewModel.class);
 
         mTeamViewModel.getAllTeams().observe(this, new Observer<List<Team>>() {
@@ -65,6 +62,8 @@ public class ListOfTeamsActivity extends AppCompatActivity {
                 mAdapter.setTeams(teams);
             }
         });
+
+        initializeSwipe();
 
         //mBottomMenu.bringToFront();
         mBottomMenu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

@@ -29,15 +29,19 @@ public class HockeyRepository {
         mAllTeams = mTeamDao.getAll();
     }
 
+    /*
+     *  Team Operations
+     */
     public LiveData<List<Team>> getAllTeams() {
         return mAllTeams;
     }
-    public LiveData<List<Player>> getAllPlayers() {
-        return mPlayerDao.getAll();
-    }
 
-    public LiveData<List<Player>> getTeamPlayers(int teamId) {
-        return mPlayerDao.getPlayersByTeam(teamId);
+//    public  getTeam() {
+//        return mTeamDao.getTeam(teamId);
+//    }
+
+    public LiveData<Team> getTeam (int teamId) {
+        return mTeamDao.getTeam(teamId);
     }
 
     public void insert (Team team)  {
@@ -53,12 +57,26 @@ public class HockeyRepository {
         }).subscribeOn(Schedulers.io());
     }
 
+
     public void removeTeam(final Team team){
         mTeamDao.delete(team);
     }
 
     public void updateTeam(final Team team){
+        new updateAsyncTeam(mTeamDao, team).execute();
         mTeamDao.update(team);
+    }
+
+    /*
+     *  Player Operations
+     */
+
+    public LiveData<List<Player>> getAllPlayers() {
+        return mPlayerDao.getAll();
+    }
+
+    public LiveData<List<Player>> getTeamPlayers(int teamId) {
+        return mPlayerDao.getPlayersByTeam(teamId);
     }
 
     public void addPlayer (Player player) {
@@ -102,6 +120,22 @@ public class HockeyRepository {
             if (mAddTeamListener != null) {
                 mAddTeamListener.onTeamAdded(addedId);
             }
+        }
+    }
+
+    private static class updateAsyncTeam extends AsyncTask<Void, Void, Boolean> {
+        private TeamDao mAsyncTaskDao;
+        private Team mTeam;
+
+        updateAsyncTeam(TeamDao dao, Team team) {
+            mAsyncTaskDao = dao;
+            mTeam = team;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params){
+            mAsyncTaskDao.update(mTeam);
+            return true;
         }
     }
 }
