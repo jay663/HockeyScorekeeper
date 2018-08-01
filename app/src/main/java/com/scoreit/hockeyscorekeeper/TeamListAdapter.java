@@ -42,21 +42,24 @@ public class TeamListAdapter extends RecyclerView.Adapter<TeamListAdapter.TeamVi
         return mTeams.get(mSelectedTeam);
     }
 
+    public void clearSelectedTeam(){
+        notifyItemChanged(mSelectedTeam);
+        mSelectedTeam = -1;
+    }
+
     public class TeamViewHolder extends RecyclerView.ViewHolder {
         public final TextView teamItemView;
         public final CheckBox teamItemCheckBox;
         public final CardView teamItemCL;
 
-        public View layout;
-
         private TeamViewHolder(View itemView) {
             super(itemView);
-            layout = itemView;
             teamItemView = itemView.findViewById(R.id.team_item_name);
             teamItemCL = itemView.findViewById(R.id.team_item_cl);
             teamItemCheckBox = itemView.findViewById(R.id.team_item_checkBox);
         }
     }
+
 
     @Override
     public TeamViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -76,6 +79,14 @@ public class TeamListAdapter extends RecyclerView.Adapter<TeamListAdapter.TeamVi
         }
 
         holder.teamItemCheckBox.setChecked((mSelectedTeam == position));
+        if (mSelectedTeam == position)
+        {
+            holder.teamItemCheckBox.setVisibility(View.VISIBLE);
+        }else{
+            holder.teamItemCheckBox.setVisibility(View.GONE);
+        }
+
+
         holder.teamItemCL.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -92,10 +103,12 @@ public class TeamListAdapter extends RecyclerView.Adapter<TeamListAdapter.TeamVi
                     mMenu.setVisibility(View.VISIBLE);
                     mAddButton.hide();
                 }
-
+                notifyDataSetChanged();
             }
         });
+
     }
+
 
     void setTeams(List<Team> teams){
         mTeams = teams;
@@ -110,32 +123,6 @@ public class TeamListAdapter extends RecyclerView.Adapter<TeamListAdapter.TeamVi
         notifyItemRangeChanged(position, mTeams.size());
         return team;
 
-        //                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-//                builder.setTitle("Choose option");
-//                builder.setMessage("Update roster or edit team name?");
-//                builder.setPositiveButton("Update Roster", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//
-//                        //go to update activity
-//                        //goToUpdateActivity(person.getId());
-//                        Log.d(TAG, "Selected Update Roster");
-//
-//                    }
-//                });
-//                builder.setNeutralButton("Edit Team Name", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        Log.d(TAG, "Selected Edit Team Name ");
-//                    }
-//                });
-//                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                    }
-//                });
-//                builder.create().show();ß
     }
 
     public void restoreItem(Team team, int position)

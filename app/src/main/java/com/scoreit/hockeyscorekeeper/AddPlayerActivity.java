@@ -36,9 +36,9 @@ public class AddPlayerActivity extends AppCompatActivity {
         mTeamId = intent.getIntExtra(ADD_PLAYER_TEAM_ID, -1);
         mPlayerViewModel = ViewModelProviders.of(this).get(PlayerViewModel.class);
 
-        mPlayerNameTextBox = findViewById(R.id.edit_player_name);
-        mPlayerJerseyTextBox = findViewById(R.id.edit_jersey_number);
-        mPlayerPosSpinner = (Spinner) findViewById(R.id.spinner_position);
+        mPlayerNameTextBox = findViewById(R.id.add_player_name_et);
+        mPlayerJerseyTextBox = findViewById(R.id.add_player_jersey_number_et);
+        mPlayerPosSpinner = (Spinner) findViewById(R.id.add_player_position_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.position_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -47,15 +47,18 @@ public class AddPlayerActivity extends AppCompatActivity {
     }
 
     public void onAddPlayerBtnClick(View view){
-            if (validPlayerInput()) {
-                String playerName = mPlayerNameTextBox.getText().toString();
-                String position = mPlayerPosSpinner.getSelectedItem().toString();
-                int jersey = Integer.parseInt(mPlayerJerseyTextBox.getText().toString());
+        Intent replyIntent = new Intent();
 
-                Player player = new Player(jersey, mTeamId, playerName, position);
-                mPlayerViewModel.insert(player);
-                finish();
-            }
+        if (validPlayerInput()) {
+            String playerName = mPlayerNameTextBox.getText().toString();
+            String position = mPlayerPosSpinner.getSelectedItem().toString();
+            int jersey = Integer.parseInt(mPlayerJerseyTextBox.getText().toString());
+
+            Player player = new Player(jersey, mTeamId, playerName, position);
+            mPlayerViewModel.insert(player);
+            setResult(RESULT_OK, replyIntent);
+            finish();
+        }
     }
 
     private boolean validPlayerInput() {

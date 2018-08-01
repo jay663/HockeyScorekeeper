@@ -23,7 +23,7 @@ public class GameScoring {
     public int period;
 
     @ColumnInfo(name = "scoringPlayer")
-    public int scoringPlayerJersey;
+    public Integer scoringPlayerJersey;
 
     @ColumnInfo(name = "gameTime")
     public String gameTime;

@@ -5,11 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".TeamRosterActivity"
-    tools:showIn="@layout/activity_team_roster">
-
+    tools:context=".CoachesActivity"
+    tools:showIn="@layout/activity_coaches">
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/player_recycler_view"
+        android:id="@+id/coaches_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/background_light"
@@ -21,5 +20,5 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:clipToPadding="false"
-        tools:listitem="@layout/roster_player_view_item" />
+        tools:listitem="@layout/coaches_view_item" />
 </androidx.constraintlayout.widget.ConstraintLayout>

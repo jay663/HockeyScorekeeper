@@ -79,4 +79,15 @@ public class PlayerViewModel extends AndroidViewModel {
         return teamPlayers;
     }
 
+    public void deletePlayer(Player player) {
+        mRepository.removePlayer(player);
+    }
+
+    public LiveData<Player> getPlayer(int teamId, int playerId) {
+        return mRepository.getPlayer(teamId, playerId);
+    }
+
+    public void update(Player player) {
+        mRepository.updatePlayer(player);
+    }
 }

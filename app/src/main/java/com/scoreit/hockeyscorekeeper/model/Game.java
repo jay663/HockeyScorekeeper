@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 @Entity(tableName = "game_table")
 public class Game {
     @NonNull
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

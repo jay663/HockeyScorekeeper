@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <EditText
-        android:id="@+id/edit_player_name"
+        android:id="@+id/add_player_name_et"
         android:layout_width="match_parent"
         android:layout_height="@dimen/player_edit_height"
         android:layout_alignParentStart="true"
@@ -20,10 +20,10 @@
         android:textSize="18sp" />
 
     <EditText
-        android:id="@+id/edit_jersey_number"
+        android:id="@+id/add_player_jersey_number_et"
         android:layout_width="140dp"
         android:layout_height="@dimen/player_edit_height"
-        android:layout_below="@id/edit_player_name"
+        android:layout_below="@id/add_player_name_et"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="20dp"
         android:hint="@string/hint_jersey_number"
@@ -31,20 +31,23 @@
         android:textSize="18sp" />
 
     <Spinner
-        android:id="@+id/spinner_position"
+        android:id="@+id/add_player_position_spinner"
         android:layout_width="150dp"
         android:layout_height="@dimen/player_edit_height"
-        android:layout_alignStart="@+id/edit_jersey_number"
-        android:layout_alignLeft="@+id/edit_jersey_number"
-        android:layout_alignTop="@id/edit_jersey_number"
+        android:layout_alignStart="@+id/add_player_jersey_number_et"
+        android:layout_alignLeft="@+id/add_player_jersey_number_et"
+        android:layout_alignTop="@id/add_player_jersey_number_et"
         android:layout_marginStart="199dp"
         android:layout_marginLeft="199dp" />
+
 
     <Button
         android:id="@+id/add_player_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edit_jersey_number"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/buttonLabel"
+        android:layout_below="@id/add_player_jersey_number_et"
         android:layout_marginTop="40dp"
         android:onClick="onAddPlayerBtnClick"
         android:text="Save" />
@@ -52,6 +55,8 @@
         android:id="@+id/cancel_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/buttonLabel"
         android:layout_below="@id/add_player_button"
         android:layout_marginTop="10dp"
         android:text="Cancel"

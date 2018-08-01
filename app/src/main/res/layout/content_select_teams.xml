@@ -8,67 +8,62 @@
     tools:context=".SelectTeamsActivity"
     tools:showIn="@layout/activity_select_teams">
 
+
+    <TextView
+        android:id="@+id/home_team_selector_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/merriweather"
+        android:inputType="none"
+        android:text="@string/home_team_label"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/away_team_selector_label"
+        app:layout_constraintEnd_toStartOf="@+id/home_team_selector"
+        app:layout_constraintHorizontal_bias="0.043"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.427" />
+
     <Spinner
         android:id="@+id/home_team_selector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="72dp"
-        android:layout_marginEnd="68dp"
-        android:layout_marginRight="68dp"
+        android:layout_marginEnd="180dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/away_team_selector"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.01"></Spinner>
+        app:layout_constraintVertical_bias="0.07"></Spinner>
+
+    <TextView
+        android:id="@+id/away_team_selector_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="376dp"
+        android:fontFamily="@font/merriweather"
+        android:inputType="none"
+        android:text="@string/away_team_label"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/away_team_selector"
+        app:layout_constraintHorizontal_bias="0.153"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Spinner
         android:id="@+id/away_team_selector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="204dp"
-        android:layout_marginEnd="68dp"
-        android:layout_marginRight="68dp"
+        android:layout_marginTop="196dp"
+        android:layout_marginEnd="180dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"></Spinner>
 
-    <TextView
-        android:id="@+id/home_team_selector_label"
-        android:layout_width="87dp"
-        android:layout_height="29dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:ems="10"
-        android:inputType="none"
-        android:text="Home Team"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/away_team_selector_label"
-        app:layout_constraintEnd_toStartOf="@+id/home_team_selector"
-        app:layout_constraintHorizontal_bias="0.642"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.408" />
-
-    <TextView
-        android:id="@+id/away_team_selector_label"
-        android:layout_width="91dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="204dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:ems="10"
-        android:inputType="none"
-        android:text="Away Team"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@+id/away_team_selector"
-        app:layout_constraintHorizontal_bias="0.658"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

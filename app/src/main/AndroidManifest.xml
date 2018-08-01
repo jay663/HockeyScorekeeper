@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" android:theme="@style/start_screen_no_title">
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/start_screen_no_title">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,11 +38,28 @@
         <activity
             android:name=".GoalDialogActivity"
             android:theme="@android:style/Theme.Holo.Dialog" />
-        <activity android:name=".EditTeamActivity"></activity>
+        <activity android:name=".EditTeamActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <activity
+            android:name=".EditPlayerActivity"
+            android:label="@string/title_activity_edit_player"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CoachesActivity"
+            android:label="@string/title_activity_coaches"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AddCoachActivity"
+            android:label="@string/title_activity_add_coach"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SetLineupActivity"
+            android:label="@string/title_activity_set_lineup"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

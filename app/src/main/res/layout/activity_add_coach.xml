@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:title="Add Coach"
+            />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <EditText
+        android:id="@+id/add_coach_name_et"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/player_edit_height"
+        android:layout_marginTop="20dp"
+        android:fontFamily="sans-serif-light"
+        android:hint="@string/hint_coaches_name"
+        android:inputType="textAutoComplete"
+        android:padding="@dimen/small_padding"
+        android:textSize="18sp" />
+
+    <Spinner
+        android:id="@+id/add_coach_title_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/player_edit_height"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        />
+
+    <Button
+        android:id="@+id/add_coach_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/buttonLabel"
+        android:layout_below="@id/add_player_jersey_number_et"
+        android:layout_marginTop="40dp"
+        android:onClick="onAddCoachBtnClick"
+        android:text="Save" />
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/buttonLabel"
+        android:layout_below="@id/add_player_button"
+        android:layout_marginTop="36dp"
+        android:text="Cancel"
+        android:onClick="onCancelBtnClick"/>
+
+
+
+
+</LinearLayout>

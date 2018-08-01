@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<androidx.cardview.widget.CardView android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:background="@android:color/holo_blue_light"
-    android:layout_centerVertical="true"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/roster_player_cl"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginTop="5dp"
+    app:cardCornerRadius="5dp">
 
-    <TextView
-        android:id="@+id/player_jersey_item"
-        android:layout_width="@dimen/player_roster_jersey_width"
-        android:layout_height="@dimen/player_roster_name_height"
-        style="@style/player_roster_name_style" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
 
-    <TextView
-        android:id="@+id/player_name_item"
-        android:layout_width="201dp"
-        android:layout_height="@dimen/player_roster_name_height"
-        style="@style/player_roster_name_style" />
+        <TextView
+            android:id="@+id/player_jersey_item"
+            style="@style/player_roster_jersey_style" />
 
-    <TextView
-        android:id="@+id/player_position_item"
-        android:layout_width="@dimen/player_roster_pos_width"
-        android:layout_height="@dimen/player_roster_name_height"
-        style="@style/player_roster_name_style"
-        />
-</LinearLayout>
 
+        <TextView
+            android:id="@+id/player_name_item"
+            style="@style/player_roster_name_style" />
+
+        <TextView
+            android:id="@+id/player_position_item"
+            style="@style/player_roster_position_style" />
+
+        <CheckBox
+            android:id="@+id/roster_player_checkbox"
+            style="@style/player_roster_checkbox_style" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

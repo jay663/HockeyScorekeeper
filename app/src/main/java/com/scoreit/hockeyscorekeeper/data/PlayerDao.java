@@ -27,4 +27,7 @@ public interface PlayerDao {
 
     @Query("SELECT * FROM player_table WHERE teamId = :teamId")
     LiveData<List<Player>> getPlayersByTeam(int teamId);
+
+    @Query("SELECT * FROM player_table WHERE teamId = :teamId AND jerseyNumber = :playerId")
+    LiveData<Player> getPlayer(int teamId, int playerId);
 }

@@ -47,5 +47,15 @@
         android:background="@color/colorPrimary"
         android:onClick="onAddTeamClick"
         android:text="@string/button_save"
+        android:textColor="@color/buttonLabel"
+        android:layout_marginBottom="20dp"/>
+
+    <Button
+        android:id="@+id/add_team_button_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:onClick="onAddTeamCancelClick"
+        android:text="@string/cancel"
         android:textColor="@color/buttonLabel" />
 </LinearLayout>
