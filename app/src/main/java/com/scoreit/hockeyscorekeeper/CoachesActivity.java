@@ -8,8 +8,8 @@ import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.scoreit.hockeyscorekeeper.model.Player;
-import com.scoreit.hockeyscorekeeper.viewmodel.PlayerViewModel;
+import com.scoreit.hockeyscorekeeper.model.Coach;
+import com.scoreit.hockeyscorekeeper.viewmodel.CoachViewModel;
 
 import java.util.List;
 
@@ -23,16 +23,14 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static com.scoreit.hockeyscorekeeper.AddTeamActivity.EXTRA_PLAYER_TEAM_ID;
-import static com.scoreit.hockeyscorekeeper.EditPlayerActivity.EDIT_PLAYER_ID;
-import static com.scoreit.hockeyscorekeeper.EditTeamActivity.EDIT_TEAM_ID;
+import static com.scoreit.hockeyscorekeeper.AddCoachActivity.ADD_COACH_TEAM_ID;
 
-public class TeamRosterActivity extends AppCompatActivity {
+public class CoachesActivity extends AppCompatActivity {
+    public static final String COACHES_TEAM_ID = "COACHES_TEAM_ID";
+    public static final String COACHES_TEAM_NAME = "COACHES_TEAM_NAME";
 
-    public static final String ADD_PLAYER_TEAM_ID = "ADD_PLAYER_TEAM_ID";
-    private static final String ADD_COACH_TEAM_ID = "ADD_COACH_TEAM_ID";
-    private PlayerViewModel mPlayerViewModel;
-    private PlayerListAdapter mAdapter;
+    private CoachViewModel mCoachViewModel;
+    private CoachListAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private BottomNavigationView mBottomMenu;
     private int mTeamId;
@@ -40,34 +38,35 @@ public class TeamRosterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_team_roster);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
+        setContentView(R.layout.activity_coaches);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         Intent intent = getIntent();
-        mTeamId = intent.getIntExtra(EXTRA_PLAYER_TEAM_ID, -1);
-        String title = "Manage Roster";
-        String teamName = intent.getStringExtra(ListOfTeamsActivity.ROSTER_TEAM_NAME);
+        mTeamId = intent.getIntExtra(COACHES_TEAM_ID, -1);
+        String title = "Add Team Coaches";
+        String teamName = intent.getStringExtra(COACHES_TEAM_NAME);
         if (teamName != null) {
-            title = String.format("%s Roster", teamName);
+            title = String.format("Add %s Coaches", teamName);
         }
 
         toolbar.setTitle(title);
         setSupportActionBar(toolbar);
 
-        mRecyclerView = findViewById(R.id.player_recycler_view);
-        FloatingActionButton addButton = (FloatingActionButton) findViewById(R.id.fab);
-        mBottomMenu = (BottomNavigationView)findViewById(R.id.roster_navigationView);
-        mAdapter = new PlayerListAdapter(this, mBottomMenu, addButton, mTeamId);
+        mRecyclerView = findViewById(R.id.coaches_recycler_view);
+        FloatingActionButton addButton = (FloatingActionButton) findViewById(R.id.coaches_fab);
+        mBottomMenu = (BottomNavigationView)findViewById(R.id.coaches_navigationView);
+
+        mAdapter = new CoachListAdapter(this, mBottomMenu, addButton, mTeamId);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        mPlayerViewModel = ViewModelProviders.of(this).get(PlayerViewModel.class);
+        mCoachViewModel = ViewModelProviders.of(this).get(CoachViewModel.class);
 
-        mPlayerViewModel.getTeamPlayers(mTeamId).observe(this, new Observer<List<Player>>() {
+        mCoachViewModel.getTeamCoaches(mTeamId).observe(this, new Observer<List<Coach>>() {
             @Override
-            public void onChanged(@Nullable final List<Player> players) {
+            public void onChanged(@Nullable final List<Coach> coaches) {
                 // Update the cached copy of the words in the adapter.
-                mAdapter.setPlayers(players);
+                mAdapter.setCoaches(coaches);
             }
         });
 
@@ -76,15 +75,15 @@ public class TeamRosterActivity extends AppCompatActivity {
         mBottomMenu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Player player = mAdapter.getSelectedPlayer();
-                if (player != null) {
+                Coach coach = mAdapter.getSelectedCoach();
+                if (coach != null) {
                     switch (item.getItemId()) {
-                        case R.id.navigation_edit_player:
-                            Intent editPlayerIntent = new Intent(getApplicationContext(), EditPlayerActivity.class);
-                            editPlayerIntent.putExtra(EDIT_TEAM_ID, player.mTeamId);
-                            editPlayerIntent.putExtra(EDIT_PLAYER_ID, player.mJerseyNumber);
-                            startActivity(editPlayerIntent);
-                            mAdapter.clearSelectedPlayer();
+                        case R.id.navigation_edit_coach:
+//                            Intent editPlayerIntent = new Intent(getApplicationContext(), EditPlayerActivity.class);
+//                            editPlayerIntent.putExtra(EDIT_TEAM_ID, coach.mTeamId);
+//                            editPlayerIntent.putExtra(EDIT_PLAYER_ID, coach.mJerseyNumber);
+//                            startActivity(editPlayerIntent);
+//                            mAdapter.clearSelectedCoach();
                             return true;
                     }
                 }
@@ -94,7 +93,7 @@ public class TeamRosterActivity extends AppCompatActivity {
 
     }
 
-    protected void initializeSwipe(){
+    private void initializeSwipe() {
         ItemTouchHelper.SimpleCallback simpleItemCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -104,8 +103,8 @@ public class TeamRosterActivity extends AppCompatActivity {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
-                Player player = mAdapter.removeItem(position);
-                mPlayerViewModel.deletePlayer(player);
+                Coach coach = mAdapter.removeItem(position);
+                mCoachViewModel.deleteCoach(coach);
             }
 
             @Override
@@ -118,10 +117,10 @@ public class TeamRosterActivity extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
     }
 
-    public void onAddPlayerFloatBtnClick(View view){
-        Intent addPlayerIntent = new Intent(getApplicationContext(), AddPlayerActivity.class);
-        addPlayerIntent.putExtra(ADD_PLAYER_TEAM_ID, mTeamId);
-        startActivity(addPlayerIntent);
+    public void onAddCoachFloatBtnClick(View view) {
+        Intent addCoachIntent = new Intent(getApplicationContext(), AddCoachActivity.class);
+        addCoachIntent.putExtra(ADD_COACH_TEAM_ID, mTeamId);
+        startActivity(addCoachIntent);
+        mAdapter.clearSelectedCoach();
     }
-
 }

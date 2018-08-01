@@ -42,7 +42,7 @@ public class SelectTeamsActivity extends AppCompatActivity {
 
     }
 
-    public void OnStartGameClick(View view){
+    public void OnNextFABClick(View view){
         Spinner homeTeamSpinner = (Spinner) findViewById(R.id.home_team_selector);
         Spinner awayTeamSpinner = (Spinner) findViewById(R.id.away_team_selector);
         Team selectedHomeTeam = (Team) homeTeamSpinner.getSelectedItem();

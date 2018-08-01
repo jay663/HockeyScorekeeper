@@ -27,31 +27,52 @@
     </style>
 
     <style name="player_roster_jersey_style">
-        <item name="android:textSize">12sp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">6dp</item>
+        <item name="android:layout_marginRight">6dp</item>
+        <item name="android:fontFamily">@font/graduate</item>
+        <item name="android:padding">2dp</item>
+        <item name="android:textSize">28sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:layout_marginBottom">6dp</item>
-        <item name="android:layout_marginLeft">2dp</item>
-        <item name="android:paddingLeft">8dp</item>
     </style>
 
     <style name="player_roster_name_style">
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:layout_marginBottom">6dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginLeft">10dp</item>
-        <item name="android:layout_marginRight">10dp</item>
-        <item name="android:paddingLeft">8dp</item>
+        <item name="android:layout_toEndOf">@id/player_jersey_item</item>
+        <item name="android:fontFamily">@font/merriweather</item>
     </style>
 
     <style name="player_roster_position_style">
         <item name="android:textSize">12sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:layout_marginBottom">6dp</item>
-        <item name="android:paddingLeft">8dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">11dp</item>
+        <item name="android:layout_below">@id/player_name_item</item>
+        <item name="android:layout_toEndOf">@id/player_jersey_item</item>
+        <item name="android:fontFamily">@font/merriweather</item>
+    </style>
+
+
+    <style name="player_roster_checkbox_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:clickable">false</item>
+        <item name="android:visibility">gone</item>
     </style>
 
     <style name="start_screen_no_title" parent="Theme.Design.NoActionBar">
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
     </style>
+
+
 </resources>

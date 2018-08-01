@@ -65,6 +65,7 @@ public class EditTeamActivity extends AppCompatActivity {
             mUpdatedTeam = new Team(teamName, teamLocation, teamMascot);
             mUpdatedTeam.mTeamId = mOriginalTeam.mTeamId;
             mTeamViewModel.update(mUpdatedTeam);
+            setResult(RESULT_OK, replyIntent);
             finish();
         }
 

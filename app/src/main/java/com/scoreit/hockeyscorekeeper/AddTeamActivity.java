@@ -43,7 +43,12 @@ public class AddTeamActivity extends AppCompatActivity implements IAsyncTaskResu
             String teamLocation = mEditTeamLocation.getText().toString();
             String teamMascot = mEditTeamMascot.getText().toString();
             addTeam(teamName, teamLocation, teamMascot);
+            setResult(RESULT_OK, replyIntent);
         }
+    }
+
+    public void onAddTeamCancelClick(View view){
+        finish();
     }
 
     protected void addTeam(String teamName, String location, String mascot){

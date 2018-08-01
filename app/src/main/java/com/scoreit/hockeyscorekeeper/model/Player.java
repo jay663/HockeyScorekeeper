@@ -3,6 +3,9 @@ package com.scoreit.hockeyscorekeeper.model;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.annotation.NonNull;
+import androidx.room.ForeignKey;
+
+import static androidx.room.ForeignKey.CASCADE;
 
 //@Entity(tableName = "player_table",
 //        foreignKeys = @ForeignKey(
@@ -18,6 +21,7 @@ public class Player {
     public int mJerseyNumber;
 
     @NonNull
+    @ForeignKey(entity = Team.class, parentColumns = "teamId", childColumns = "teamId", onDelete = CASCADE)
     @ColumnInfo(name = "teamId")
     public int mTeamId;
 

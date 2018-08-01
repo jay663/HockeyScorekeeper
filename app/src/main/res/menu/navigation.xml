@@ -4,7 +4,10 @@
         android:id="@+id/navigation_edit_team"
         android:icon="@drawable/ic_edit_24"
         android:title="Edit Team"/>
-
+    <item
+        android:id="@+id/navigation_add_coaches"
+        android:icon="@drawable/ic_assignment_ind_black_24dp"
+        android:title="Add Coaches"/>
     <item
         android:id="@+id/navigation_manage_roster"
         android:icon="@drawable/ic_assignment_24"

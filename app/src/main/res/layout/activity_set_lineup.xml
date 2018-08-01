@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SelectTeamsActivity">
+    tools:context=".SetLineupActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_select_teams" />
+    <include layout="@layout/content_set_lineup" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/start_game_fab"
@@ -30,5 +30,4 @@
         android:layout_margin="@dimen/fab_margin"
         android:onClick="OnNextFABClick"
         app:srcCompat="@android:drawable/ic_media_play" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
