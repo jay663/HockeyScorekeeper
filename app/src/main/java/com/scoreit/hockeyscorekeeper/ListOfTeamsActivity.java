@@ -38,6 +38,7 @@ import static com.scoreit.hockeyscorekeeper.EditTeamActivity.EDIT_TEAM_ID;
 public class ListOfTeamsActivity extends AppCompatActivity {
     public static final String ROSTER_TEAM_NAME = "ROSTER_TEAM_NAME";
 
+
     private TeamViewModel mTeamViewModel;
     private TeamListAdapter mAdapter;
     private RecyclerView mRecyclerView;
@@ -49,11 +50,11 @@ public class ListOfTeamsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_teams);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton button = (FloatingActionButton) findViewById(R.id.fab);
-        mBottomMenu = (BottomNavigationView)findViewById(R.id.navigationView);
+        FloatingActionButton button = findViewById(R.id.fab);
+        mBottomMenu = findViewById(R.id.navigationView);
         mRecyclerView = findViewById(R.id.recyclerview);
         mAdapter = new TeamListAdapter(this, mBottomMenu, button);
 

@@ -27,4 +27,12 @@ public interface TeamDao {
 
     @Query("SELECT * FROM team_table WHERE teamId = :teamId")
     LiveData<Team> getTeam(int teamId);
+
+    @Query("SELECT * FROM team_table WHERE teamName = :teamName AND location = :teamLocation")
+    LiveData<Team> getTeam(String teamName, String teamLocation);
+
+    @Query("SELECT * FROM team_table WHERE teamId IN (:teams)")
+    LiveData<List<Team>> getGameEligibleTeams(int[] teams);
+
+    // TODO: Add Constraints to Same Team Name & Location Can't be Added
 }

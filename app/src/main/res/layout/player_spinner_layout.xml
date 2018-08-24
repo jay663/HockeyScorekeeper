@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/player_spinner_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/player_spinner_jersey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/graduate"
+            android:textColor="#A9A9A9"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            android:text="17"
+            android:textAlignment="viewEnd"
+            />
+
+        <TextView
+            android:id="@+id/player_spinner_firstName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginBottom="-3dp"
+            android:includeFontPadding="false"
+            android:layout_toEndOf="@id/player_spinner_jersey"
+            android:fontFamily="@font/oswald_bold"
+            android:text="Mitchell"
+            android:textColor="#000000"
+            android:textSize="17sp" />
+        <TextView
+            android:id="@+id/player_spinner_lastName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:text="Horn"
+            android:textAllCaps="true"
+            android:fontFamily="@font/oswald_bold"
+            android:layout_toRightOf="@id/player_spinner_jersey"
+            android:layout_below="@id/player_spinner_firstName"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="-4dp"
+            android:includeFontPadding="false"
+            />
+        <TextView
+            android:id="@+id/player_spinner_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#A9A9A9"
+            android:textAllCaps="true"
+            android:text="C"
+            android:layout_marginLeft="38dp"
+            android:layout_marginRight="2dp"
+            android:layout_toEndOf="@id/player_spinner_lastName"
+            android:layout_centerInParent="true"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            />
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

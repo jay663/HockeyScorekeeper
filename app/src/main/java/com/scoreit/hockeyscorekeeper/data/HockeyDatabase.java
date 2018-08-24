@@ -1,6 +1,7 @@
 package com.scoreit.hockeyscorekeeper.data;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
 import com.scoreit.hockeyscorekeeper.model.Coach;
 import com.scoreit.hockeyscorekeeper.model.Game;
@@ -31,6 +32,7 @@ public abstract class HockeyDatabase extends RoomDatabase {
     public abstract PenaltyTypeDao getPenaltyTypeDao();
     public abstract PlayerDao getPlayerDao();
     public abstract TeamDao getTeamDao();
+    public abstract RosterCountDao getRosterCountDao();
 
     private static HockeyDatabase INSTANCE;
 
@@ -55,26 +57,33 @@ public abstract class HockeyDatabase extends RoomDatabase {
                 @Override
                 public void onOpen(@NonNull SupportSQLiteDatabase db) {
                     super.onOpen(db);
-                    //new PopulateDbAsync(INSTANCE).execute();
+                    new PopulateDbAsync(INSTANCE).execute();
                 }
             };
 
-//    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
-//
-//        private final TeamDao mDao;
-//
-//        PopulateDbAsync(HockeyDatabase db) {
-//            mDao = db.TeamDao();
-//        }
-//
-//        @Override
-//        protected Void doInBackground(final Void... params) {
-//            mDao.deleteAll();
-//            Word word = new Word("Hello");
-//            mDao.insert(word);
-//            word = new Word("World");
-//            mDao.insert(word);
-//            return null;
-//        }
-//    }
+    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
+
+        private final TeamDao mTeamDao;
+        private final PlayerDao mPlayerDao;
+
+        PopulateDbAsync(HockeyDatabase db) {
+            mTeamDao = db.getTeamDao();
+            mPlayerDao = db.getPlayerDao();
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            String teamName = "Lakers";
+            String location = "Cleveland";
+
+            // TODO: Delete Records of Defaults
+            //Team defaultTeam = new Team("Lakers", "Cleveland", "Lakers");
+
+
+            // TODO: Add Records of Defaults
+            //mDao.deleteAll();
+            //mDao.insert(word);
+            return null;
+        }
+    }
 }

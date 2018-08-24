@@ -35,7 +35,7 @@ public class AddCoachActivity extends AppCompatActivity {
         mCoachViewModel = ViewModelProviders.of(this).get(CoachViewModel.class);
 
         mCoachNameTextBox = findViewById(R.id.add_coach_name_et);
-        mCoachTitleSpinner = (Spinner) findViewById(R.id.add_coach_title_spinner);
+        mCoachTitleSpinner = findViewById(R.id.add_coach_title_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.coach_title_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

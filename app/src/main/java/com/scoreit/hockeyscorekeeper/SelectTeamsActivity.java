@@ -1,5 +1,6 @@
 package com.scoreit.hockeyscorekeeper;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -13,8 +14,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
 public class SelectTeamsActivity extends AppCompatActivity {
+    public static final String HOME_TEAM_ID = "HOME_TEAM_ID";
+    public static final String AWAY_TEAM_ID = "AWAY_TEAM_ID";
 
-    private SelectTeamViewModel mSelectTeamViewModel;
+    private SelectTeamViewModel mViewModel;
+    private ArrayAdapter<Team> mHomeArrayAdapter;
+    private ArrayAdapter<Team> mAwayArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,36 +28,43 @@ public class SelectTeamsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //EditText homeTeamLabel = (EditText) findViewById(R.id.home_team_selector_label);
-        //EditText awayTeamLabel = (EditText) findViewById(R.id.away_team_selector_label);
-
-        mSelectTeamViewModel = ViewModelProviders.of(this).get(SelectTeamViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(SelectTeamViewModel.class);
 
         Spinner homeTeamSpinner = (Spinner) findViewById(R.id.home_team_selector);
         Spinner awayTeamSpinner = (Spinner) findViewById(R.id.away_team_selector);
 
-        ArrayAdapter homeArrayAdapter = new ArrayAdapter(this,
-                android.R.layout.simple_spinner_item, mSelectTeamViewModel.getAllTeams());
+        mViewModel.getAllTeams().observe(this, teamList -> {
+            mHomeArrayAdapter = new ArrayAdapter(this,
+                    android.R.layout.simple_spinner_item, teamList);
 
-        ArrayAdapter awayArrayAdapter = new ArrayAdapter(this,
-                android.R.layout.simple_spinner_item, mSelectTeamViewModel.getAllTeams());
+            mAwayArrayAdapter = new ArrayAdapter(this,
+                    android.R.layout.simple_spinner_item, teamList);
 
-        homeTeamSpinner.setAdapter(homeArrayAdapter);
-        awayTeamSpinner.setAdapter(awayArrayAdapter);
+            homeTeamSpinner.setAdapter(mHomeArrayAdapter);
+            awayTeamSpinner.setAdapter(mAwayArrayAdapter);
+        });
 
     }
 
     public void OnNextFABClick(View view){
         Spinner homeTeamSpinner = (Spinner) findViewById(R.id.home_team_selector);
-        Spinner awayTeamSpinner = (Spinner) findViewById(R.id.away_team_selector);
+        Spinner awayTeamSpinner = findViewById(R.id.away_team_selector);
         Team selectedHomeTeam = (Team) homeTeamSpinner.getSelectedItem();
         Team selectedAwayTeam = (Team) awayTeamSpinner.getSelectedItem();
 
-//        Intent scoreGameIntent = new Intent(getApplicationContext(), PlayGameActivity.class);
-//        scoreGameIntent.putExtra("HOME_TEAM_ID", selectedHomeTeam.mTeamId);
-//        scoreGameIntent.putExtra("AWAY_TEAM_ID", selectedAwayTeam.mTeamId);
-//        startActivity(scoreGameIntent);
-        finish();
+        Intent setLineupIntent = new Intent(getApplicationContext(), SetLineupActivity.class);
+        setLineupIntent.putExtra(HOME_TEAM_ID, selectedHomeTeam.mTeamId);
+        setLineupIntent.putExtra(AWAY_TEAM_ID, -1);
+        startActivity(setLineupIntent);
+
+        setLineupIntent = new Intent(getApplicationContext(), SetLineupActivity.class);
+        setLineupIntent.putExtra(HOME_TEAM_ID, -1);
+        setLineupIntent.putExtra(AWAY_TEAM_ID, selectedAwayTeam.mTeamId);
+        startActivity(setLineupIntent);
+
+        // Set Home Team Lineup -> Set Away Team Lineup
+        // Start Game
+
 
     }
 

@@ -54,7 +54,7 @@ public class CoachesActivity extends AppCompatActivity {
 
         mRecyclerView = findViewById(R.id.coaches_recycler_view);
         FloatingActionButton addButton = (FloatingActionButton) findViewById(R.id.coaches_fab);
-        mBottomMenu = (BottomNavigationView)findViewById(R.id.coaches_navigationView);
+        mBottomMenu = findViewById(R.id.coaches_navigationView);
 
         mAdapter = new CoachListAdapter(this, mBottomMenu, addButton, mTeamId);
         mRecyclerView.setAdapter(mAdapter);

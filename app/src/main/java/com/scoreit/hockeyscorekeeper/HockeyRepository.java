@@ -6,15 +6,19 @@ import android.os.AsyncTask;
 import com.scoreit.hockeyscorekeeper.data.CoachDao;
 import com.scoreit.hockeyscorekeeper.data.HockeyDatabase;
 import com.scoreit.hockeyscorekeeper.data.PlayerDao;
+import com.scoreit.hockeyscorekeeper.data.RosterCountDao;
 import com.scoreit.hockeyscorekeeper.data.TeamDao;
 import com.scoreit.hockeyscorekeeper.model.Coach;
 import com.scoreit.hockeyscorekeeper.model.Player;
+import com.scoreit.hockeyscorekeeper.model.RosterCount;
 import com.scoreit.hockeyscorekeeper.model.Team;
 
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
@@ -22,7 +26,11 @@ public class HockeyRepository {
     private TeamDao mTeamDao;
     private PlayerDao mPlayerDao;
     private CoachDao mCoachDao;
+    private RosterCountDao mRosterCountDao;
+
     private LiveData<List<Team>> mAllTeams;
+    private LiveData<List<String>> mGameEligibleTeams;
+    private LiveData<List<RosterCount>> mGameEligibleTeamsIds;
     public IAsyncTaskResults<Long> addTeamDelegate = null;
 
     public HockeyRepository(Application application) {
@@ -30,7 +38,9 @@ public class HockeyRepository {
         mTeamDao = db.getTeamDao();
         mPlayerDao = db.getPlayerDao();
         mCoachDao = db.getCoachDao();
+        mRosterCountDao = db.getRosterCountDao();
         mAllTeams = mTeamDao.getAll();
+
     }
 
     /*
@@ -39,6 +49,29 @@ public class HockeyRepository {
     public LiveData<List<Team>> getAllTeams() {
         return mAllTeams;
     }
+
+    public LiveData<List<Team>> getGameReadyTeams() {
+        LiveData<List<RosterCount>> eligibleRosters = mRosterCountDao.eligibleTeamIds(5);
+
+        LiveData<List<Team>> teams = Transformations.switchMap(eligibleRosters,
+                new Function<List<RosterCount>, LiveData<List<Team>>>() {
+                    @Override
+                    public LiveData<List<Team>> apply(List<RosterCount> input) {
+                        int[] teamIds = new int[input.size()];
+
+                        for (int i=0; i<input.size();i++){
+                            teamIds[i] = input.get(i).teamId;
+                        }
+
+                        return mTeamDao.getGameEligibleTeams(teamIds);
+                    }
+                });
+
+
+        //return mTeamDao.getAll();
+        return teams;
+    }
+
 
     public LiveData<Team> getTeam (int teamId) {
         return mTeamDao.getTeam(teamId);
@@ -60,12 +93,10 @@ public class HockeyRepository {
 
     public void removeTeam(final Team team){
         new removeAsyncTeam(mTeamDao, team).execute();
-        //mTeamDao.delete(team);
     }
 
     public void updateTeam(final Team team){
         new updateAsyncTeam(mTeamDao, team).execute();
-        //mTeamDao.update(team);
     }
 
     /*
