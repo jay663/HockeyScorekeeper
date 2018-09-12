@@ -4,15 +4,22 @@ import android.app.Application;
 import android.os.AsyncTask;
 
 import com.scoreit.hockeyscorekeeper.data.CoachDao;
+import com.scoreit.hockeyscorekeeper.data.GameDao;
+import com.scoreit.hockeyscorekeeper.data.GameLineupDao;
+import com.scoreit.hockeyscorekeeper.data.GameShotsDao;
 import com.scoreit.hockeyscorekeeper.data.HockeyDatabase;
 import com.scoreit.hockeyscorekeeper.data.PlayerDao;
 import com.scoreit.hockeyscorekeeper.data.RosterCountDao;
 import com.scoreit.hockeyscorekeeper.data.TeamDao;
 import com.scoreit.hockeyscorekeeper.model.Coach;
+import com.scoreit.hockeyscorekeeper.model.Game;
+import com.scoreit.hockeyscorekeeper.model.GameLineup;
+import com.scoreit.hockeyscorekeeper.model.GameShots;
 import com.scoreit.hockeyscorekeeper.model.Player;
 import com.scoreit.hockeyscorekeeper.model.RosterCount;
 import com.scoreit.hockeyscorekeeper.model.Team;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -27,6 +34,9 @@ public class HockeyRepository {
     private PlayerDao mPlayerDao;
     private CoachDao mCoachDao;
     private RosterCountDao mRosterCountDao;
+    private GameDao mGameDao;
+    private GameLineupDao mGameLineupDao;
+    private GameShotsDao mGameShotsDao;
 
     private LiveData<List<Team>> mAllTeams;
     private LiveData<List<String>> mGameEligibleTeams;
@@ -39,8 +49,10 @@ public class HockeyRepository {
         mPlayerDao = db.getPlayerDao();
         mCoachDao = db.getCoachDao();
         mRosterCountDao = db.getRosterCountDao();
+        mGameDao = db.getGameDao();
+        mGameLineupDao = db.getGameLineupDao();
+        mGameShotsDao = db.getGameShotsDao();
         mAllTeams = mTeamDao.getAll();
-
     }
 
     /*
@@ -67,11 +79,8 @@ public class HockeyRepository {
                     }
                 });
 
-
-        //return mTeamDao.getAll();
         return teams;
     }
-
 
     public LiveData<Team> getTeam (int teamId) {
         return mTeamDao.getTeam(teamId);
@@ -89,7 +98,6 @@ public class HockeyRepository {
             }
         }).subscribeOn(Schedulers.io());
     }
-
 
     public void removeTeam(final Team team){
         new removeAsyncTeam(mTeamDao, team).execute();
@@ -127,7 +135,6 @@ public class HockeyRepository {
      *  Coach Operations
      */
 
-
     public LiveData<List<Coach>> getAllCoaches() {
         return mCoachDao.getAll();
     }
@@ -152,6 +159,44 @@ public class HockeyRepository {
         new updateAsyncCoach(mCoachDao, coach).execute();
     }
 
+    /*
+     *  Game Operations
+     */
+    public LiveData<Game> getGame(long gameId){
+        return mGameDao.getGame(gameId);
+    }
+
+    public Single<Long> addGame(Game game){
+        return Single.fromCallable(new Callable<Long>() {
+            @Override
+            public Long call() throws Exception {
+                long gameId = mGameDao.insert(game);
+                GameShots shots = new GameShots(gameId);
+                new addAsyncGameShots(mGameShotsDao, shots).execute();
+                return new Long(gameId);
+            }
+        }).subscribeOn(Schedulers.io());
+    }
+
+    public void updateGame(Game game){
+        mGameDao.update(game);
+    }
+
+    public void addGameLineup(ArrayList lineup) {
+        new addAsyncGameLineup(mGameLineupDao, lineup).execute();
+    }
+
+    public LiveData<GameShots> getGameShots(long id) {
+        return mGameShotsDao.getGameShots(id);
+    }
+
+    public void addGameShots(GameShots gameShots){
+        mGameShotsDao.insert(gameShots);
+    }
+
+    public void updateGameShots(GameShots gameShots) {
+        mGameShotsDao.update(gameShots);
+    }
 
     private static class updateAsyncPlayer extends AsyncTask<Void, Void, Boolean> {
         private PlayerDao mAsyncTaskDao;
@@ -224,7 +269,7 @@ public class HockeyRepository {
         @Override
         protected void onPostExecute(Long addedId){
             if (mAddTeamListener != null) {
-                mAddTeamListener.onTeamAdded(addedId);
+                mAddTeamListener.onItemAdded(addedId);
             }
         }
     }
@@ -305,6 +350,62 @@ public class HockeyRepository {
         @Override
         protected Boolean doInBackground(Void... voids) {
             mAsyncTaskDao.delete(mCoach);
+            return true;
+        }
+    }
+
+    private static class addAsyncGame extends AsyncTask<Game, Void, Long> {
+
+        private GameDao mAsyncTaskDao;
+        private IAsyncTaskResults<Long> mAddGameListener;
+
+        addAsyncGame(GameDao dao, IAsyncTaskResults<Long> asyncTaskListener) {
+            mAsyncTaskDao = dao;
+            mAddGameListener = asyncTaskListener;
+        }
+
+        @Override
+        protected Long doInBackground(final Game... params) {
+            long result = mAsyncTaskDao.insert(params[0]);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(Long addedId) {
+            if (mAddGameListener != null) {
+                mAddGameListener.onItemAdded(addedId);
+            }
+        }
+    }
+
+    private static class addAsyncGameLineup extends AsyncTask<Void, Void, Boolean> {
+        private GameLineupDao mAsyncTaskDao;
+        private List<GameLineup> mGameLineup;
+
+        addAsyncGameLineup(GameLineupDao dao, List<GameLineup> gameLineup) {
+            mAsyncTaskDao = dao;
+            mGameLineup = gameLineup;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params){
+            mAsyncTaskDao.insertAll(mGameLineup);
+            return true;
+        }
+    }
+
+    private static class addAsyncGameShots extends AsyncTask<Void, Void, Boolean> {
+        private GameShotsDao mAsyncTaskDao;
+        private GameShots mGameShots;
+
+        addAsyncGameShots(GameShotsDao dao, GameShots gameshots) {
+            mAsyncTaskDao = dao;
+            mGameShots = gameshots;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params){
+            mAsyncTaskDao.insert(mGameShots);
             return true;
         }
     }

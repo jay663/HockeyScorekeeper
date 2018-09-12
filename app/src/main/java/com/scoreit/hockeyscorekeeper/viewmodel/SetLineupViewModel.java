@@ -7,73 +7,26 @@ import android.widget.ArrayAdapter;
 import com.scoreit.hockeyscorekeeper.HockeyRepository;
 import com.scoreit.hockeyscorekeeper.PlayerArrayAdapter;
 import com.scoreit.hockeyscorekeeper.R;
+import com.scoreit.hockeyscorekeeper.model.GameLineup;
+import com.scoreit.hockeyscorekeeper.model.LineupStatus;
 import com.scoreit.hockeyscorekeeper.model.Player;
 import com.scoreit.hockeyscorekeeper.model.Team;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 public class SetLineupViewModel extends AndroidViewModel {
-    Team[] teams = {
-            new Team("Lakers", "Cleveland", "Lakers"),
-            new Team("Seagulls", "Baltimore", "Seagulls"),
-            new Team("Nashville Grapes", "Grapes", "Nashville")};
-
-    Player players[] =
-            {
-                    new Player(8, 8, "Joe Granger", "C"),
-                    new Player(9, 8, "Zachery Orange", "LW"),
-                    new Player(27, 8, "Joshua Noon", "RW"),
-                    new Player(47, 8, "Matt Blue", "D"),
-                    new Player(88, 8, "Isaac Carr", "D"),
-                    new Player(31, 8, "Sergei Green", "G"),
-                    new Player(48, 8, "Aaron Cole", "C"),
-                    new Player(39, 8, "Harry Hall", "LW"),
-                    new Player(89, 8, "Terrance Bicolli", "RW"),
-                    new Player(44, 8, "Marc Villangio", "D"),
-                    new Player(61, 8, "Dave Red", "D"),
-                    new Player(30, 8, "Dominic Mitchell", "G"),
-
-                    new Player(18, 9, "Pierre Lucra", "C"),
-                    new Player(9, 9, "Murray Ferris", "LW"),
-                    new Player(13, 9, "Jasper Ghost", "RW"),
-                    new Player(8, 9, "Manny Carbone", "D"),
-                    new Player(3, 9, "Harris Wininger", "D"),
-                    new Player(72, 9, "	Randy Grayson", "G"),
-                    new Player(10, 9, "Alexander Savardie", "C"),
-                    new Player(38, 9, "Tom Partie", "LW"),
-                    new Player(26, 9, "Oscar Doever", "RW"),
-                    new Player(23, 9, "	Mario Caparzo", "D"),
-                    new Player(58, 9, "	Sam Hill", "D"),
-                    new Player(70, 9, "Dennis Calverta", "G"),
-
-                    new Player(55, 10, "Gary Slater", "C"),
-                    new Player(81, 10, "Kyle Smith", "LW"),
-                    new Player(26, 10, "Mick Blake", "RW"),
-                    new Player(44, 10, "Jerry Morrisson", "D"),
-                    new Player(8, 10, "Larry Trubell", "D"),
-                    new Player(37, 10, "Branson Elton", "G"),
-                    new Player(25, 10, "Derrick Easton", "C"),
-                    new Player(13, 10, "Perry Mummy", "LW"),
-                    new Player(29, 10, "Cris Lane", "RW"),
-                    new Player(39, 10, "Tanner Miller", "D"),
-                    new Player(33, 10, "Dan Bruller", "D"),
-                    new Player(35, 10, "Madden George", "G")
-            };
-
-
     private HockeyRepository mRepository;
-    private List<Player> mPlayers;
+    private LiveData<List<Player>> mPlayers;
     private int mTeamId;
     private boolean mIsSettingHomeLineup;
     private int mHomeTeamId;
     private int mAwayTeamId;
-    private String mTitle;
+    private long mGameId;
 
-    // figure out how to use the Observable I can't extend baseobservable
-    //Observable<Player>
     private Player mCenter;
     private Player mLW;
     private Player mRW;
@@ -108,12 +61,16 @@ public class SetLineupViewModel extends AndroidViewModel {
         return mAwayTeamId;
     }
 
-    public void setAwayTeamId(int mAwayTeamId) {
-        this.mAwayTeamId = mAwayTeamId;
+    public long getGameId() {
+        return mGameId;
     }
 
-    public String getTitle() {
-        return mTitle;
+    public void setGameId(long mGameId) {
+        this.mGameId = mGameId;
+    }
+
+    public void setAwayTeamId(int mAwayTeamId) {
+        this.mAwayTeamId = mAwayTeamId;
     }
 
     public ArrayAdapter<Player> getLWArrayAdapter() {
@@ -166,13 +123,13 @@ public class SetLineupViewModel extends AndroidViewModel {
 
     public SetLineupViewModel(Application application) {
         super(application);
-        mPlayers = Arrays.asList(players);
         mRepository = new HockeyRepository(application);
     }
 
-    public void initialize(int homeTeamId, int awayTeamId) {
+    public void initialize(int homeTeamId, int awayTeamId, long gameId) {
         setHomeTeamId(homeTeamId);
         setAwayTeamId(awayTeamId);
+        setGameId(gameId);
 
         if(mHomeTeamId > -1){
             setTeamId(homeTeamId);
@@ -181,8 +138,6 @@ public class SetLineupViewModel extends AndroidViewModel {
             setTeamId(awayTeamId);
             setIsSettingHomeLineup(false);
         }
-
-        mTitle = String.format("Set %s Lineup", teams[mTeamId]);
     }
 
     public int getTeamId() {
@@ -241,9 +196,12 @@ public class SetLineupViewModel extends AndroidViewModel {
         this.mGoalie = mGoalie;
     }
 
-    public List<Player> getPlayers()
-    {
-        return mPlayers;
+    public LiveData<List<Player>> getTeamPlayers(){
+        return mRepository.getTeamPlayers(mTeamId);
+    }
+
+    public LiveData<Team> getTeam(){
+        return mRepository.getTeam(mTeamId);
     }
 
     public void filter(Player player, ArrayAdapter<Player> arrayAdapter, Player selectedPlayer) {
@@ -374,6 +332,29 @@ public class SetLineupViewModel extends AndroidViewModel {
     }
 
     public void saveLineup(){
+        String homeOrAway = "";
+        if (mIsSettingHomeLineup){
+            homeOrAway = "home";
+        }else{
+            homeOrAway = "away";
+        }
 
+        ArrayList lineup = new ArrayList();
+        GameLineup lineupEntry = new GameLineup(mGameId, mLW.mJerseyNumber, mTeamId, "LW", "", homeOrAway, LineupStatus.ON_ICE);
+        lineup.add(lineupEntry);
+        lineupEntry = new GameLineup(mGameId, mCenter.mJerseyNumber, mTeamId, "", "C", homeOrAway, LineupStatus.ON_ICE);
+        lineup.add(lineupEntry);
+        lineupEntry = new GameLineup(mGameId, mRW.mJerseyNumber, mTeamId, "", "RW", homeOrAway, LineupStatus.ON_ICE);
+        lineup.add(lineupEntry);
+        lineupEntry = new GameLineup(mGameId, mLD.mJerseyNumber, mTeamId, "", "LD", homeOrAway, LineupStatus.ON_ICE );
+        lineup.add(lineupEntry);
+        lineupEntry = new GameLineup(mGameId, mRD.mJerseyNumber, mTeamId, "", "RD", homeOrAway, LineupStatus.ON_ICE);
+        lineup.add(lineupEntry);
+        lineupEntry = new GameLineup(mGameId, mGoalie.mJerseyNumber, mTeamId, "", "G", homeOrAway, LineupStatus.ON_ICE);
+        lineup.add(lineupEntry);
+
+        mRepository.addGameLineup(lineup);
     }
+
+
 }

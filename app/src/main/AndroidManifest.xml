@@ -60,6 +60,9 @@
             android:name=".SetLineupActivity"
             android:label="@string/title_activity_set_lineup"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".PlayGameActivity"
+            android:label="PlayGameActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

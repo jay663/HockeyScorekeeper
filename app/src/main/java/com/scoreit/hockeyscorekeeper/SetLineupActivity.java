@@ -10,13 +10,12 @@ import android.widget.Toast;
 import com.scoreit.hockeyscorekeeper.model.Player;
 import com.scoreit.hockeyscorekeeper.viewmodel.SetLineupViewModel;
 
-import java.util.List;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
 import static com.scoreit.hockeyscorekeeper.SelectTeamsActivity.AWAY_TEAM_ID;
+import static com.scoreit.hockeyscorekeeper.SelectTeamsActivity.GAME_ID;
 import static com.scoreit.hockeyscorekeeper.SelectTeamsActivity.HOME_TEAM_ID;
 
 public class SetLineupActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -33,40 +32,43 @@ public class SetLineupActivity extends AppCompatActivity implements AdapterView.
         Intent intent = getIntent();
         int homeTeamId = intent.getIntExtra(HOME_TEAM_ID, -1);
         int awayTeamId = intent.getIntExtra(AWAY_TEAM_ID, -1);
+        long gameId = intent.getLongExtra(GAME_ID, -1);
 
         mViewModel = ViewModelProviders.of(this).get(SetLineupViewModel.class);
-        mViewModel.initialize(homeTeamId, awayTeamId);
-        toolbar.setTitle(mViewModel.getTitle());
-
-        List<Player> players = mViewModel.getPlayers();
+        mViewModel.initialize(homeTeamId, awayTeamId, gameId);
 
         Spinner lwSpinner = (Spinner) findViewById(R.id.set_lineup_lw_spinner);
-        mViewModel.setLWArrayAdapter(new PlayerArrayAdapter(this,
-                R.layout.player_spinner_layout, players));
         Spinner cSpinner = (Spinner) findViewById(R.id.set_lineup_c_spinner);
-        mViewModel.setCArrayAdapter(new PlayerArrayAdapter(this,
-                R.layout.player_spinner_layout, players));
         Spinner rwSpinner = (Spinner) findViewById(R.id.set_lineup_rw_spinner);
-        mViewModel.setRWArrayAdapter(new PlayerArrayAdapter(this,
-                R.layout.player_spinner_layout, players));
         Spinner ldSpinner = (Spinner) findViewById(R.id.set_lineup_leftd_spinner);
-        mViewModel.setLDArrayAdapter(new PlayerArrayAdapter(this,
-                R.layout.player_spinner_layout, players));
         Spinner rdSpinner = (Spinner) findViewById(R.id.set_lineup_rightd_spinner);
-        mViewModel.setRDArrayAdapter(new PlayerArrayAdapter(this,
-                R.layout.player_spinner_layout, players));
         Spinner goalieSpinner = (Spinner) findViewById(R.id.set_lineup_goalie_spinner);
-        mViewModel.setGArrayAdapter(new PlayerArrayAdapter(this,
-                R.layout.player_spinner_layout, players));
 
         //Filter filter = mGArrayAdapter.getFilter();
 
-        lwSpinner.setAdapter(mViewModel.getLWArrayAdapter());
-        cSpinner.setAdapter(mViewModel.getCArrayAdapter());
-        rwSpinner.setAdapter(mViewModel.getRWArrayAdapter());
-        ldSpinner.setAdapter(mViewModel.getLDArrayAdapter());
-        rdSpinner.setAdapter(mViewModel.getRDArrayAdapter());
-        goalieSpinner.setAdapter(mViewModel.getGArrayAdapter());
+        mViewModel.getTeamPlayers().observe(this, playerList -> {
+            mViewModel.setLWArrayAdapter(new PlayerArrayAdapter(this,
+                    R.layout.player_spinner_layout, playerList));
+            mViewModel.setCArrayAdapter(new PlayerArrayAdapter(this,
+                    R.layout.player_spinner_layout, playerList));
+            mViewModel.setRWArrayAdapter(new PlayerArrayAdapter(this,
+                    R.layout.player_spinner_layout, playerList));
+            mViewModel.setLDArrayAdapter(new PlayerArrayAdapter(this,
+                    R.layout.player_spinner_layout, playerList));
+            mViewModel.setRDArrayAdapter(new PlayerArrayAdapter(this,
+                    R.layout.player_spinner_layout, playerList));
+            mViewModel.setGArrayAdapter(new PlayerArrayAdapter(this,
+                    R.layout.player_spinner_layout, playerList));
+
+
+            lwSpinner.setAdapter(mViewModel.getLWArrayAdapter());
+            cSpinner.setAdapter(mViewModel.getCArrayAdapter());
+            rwSpinner.setAdapter(mViewModel.getRWArrayAdapter());
+            ldSpinner.setAdapter(mViewModel.getLDArrayAdapter());
+            rdSpinner.setAdapter(mViewModel.getRDArrayAdapter());
+            goalieSpinner.setAdapter(mViewModel.getGArrayAdapter());
+        });
+
 
         lwSpinner.setOnItemSelectedListener(this);
         cSpinner.setOnItemSelectedListener(this);
@@ -74,13 +76,34 @@ public class SetLineupActivity extends AppCompatActivity implements AdapterView.
         ldSpinner.setOnItemSelectedListener(this);
         rdSpinner.setOnItemSelectedListener(this);
         goalieSpinner.setOnItemSelectedListener(this);
+
+        mViewModel.getTeam().observe(this, team -> {
+            toolbar.setTitle(team.mTeamName);
+        });
+
     }
 
     public void onSetLineupNextBtn(View view) {
 
         if(isValid()){
+
             mViewModel.saveLineup();
-            finish();
+            if (mViewModel.isSettingHomeLineup())
+            {
+                Intent setLineupIntent = new Intent(getApplicationContext(), SetLineupActivity.class);
+                setLineupIntent = new Intent(getApplicationContext(), SetLineupActivity.class);
+                setLineupIntent.putExtra(HOME_TEAM_ID, -1);
+                setLineupIntent.putExtra(AWAY_TEAM_ID, mViewModel.getAwayTeamId());
+                setLineupIntent.putExtra(GAME_ID, mViewModel.getGameId());
+                startActivity(setLineupIntent);
+            }else {
+                // Start Game Activity
+                Intent playGameIntent = new Intent(getApplicationContext(), PlayGameActivity.class);
+                playGameIntent.putExtra(GAME_ID, mViewModel.getGameId());
+                startActivity(playGameIntent);
+            }
+
+            //finish();
         }
 
     }

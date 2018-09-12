@@ -88,49 +88,4 @@ public class RxJavaUnitTest {
 
     }
 
-    @Test
-    public void groupPlayersByTeamId(){
-//        List<String> teams = new ArrayList<String>();
-//
-//        Observable data;
-//        data = Observable.fromArray(players)
-//        .groupBy(player -> player.mTeamId)
-//        .flatMapSingle(g -> g.count()
-//        .map(v -> g.getKey() + ": " + v));
-//
-//        data.subscribe();
-
-//        Observable<KeyValue> source;
-//        source = Observable.fromArray(players)
-//        .groupBy(val -> val.mTeamId)
-//                .flatMap(
-//                        gr -> gr.count()
-//                                .map(count -> new KeyValue<>(gr.getKey(), count))
-//                )
-//        ).subscribe(System.out::println);
-
-
-//        Observable<Player> data = Observable.fromArray(players);
-//        data.groupBy(val -> val.mTeamId)
-//                .flatMap(
-//                        gr -> gr.count()
-//                                .map(count -> new Pair<>(gr.getKey(), count)
-//                                )
-//                ).subscribe(System.out::println);
-
-//        Observable.fromArray(players)
-//                .groupBy(p -> p.mTeamId)
-//                .subscribe(group ->
-//                        group.subscribe((t) ->
-//                                {
-//                                    if(group.getKey().toString().equals("9")){
-//                                        teams.add(group.getKey().toString());
-//                                    }
-//                                })
-//                        );
-
-        //assertEquals(teams.size(), 1);
-
-    }
-
 }

@@ -12,10 +12,13 @@ import com.scoreit.hockeyscorekeeper.viewmodel.SelectTeamViewModel;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
+import io.reactivex.SingleObserver;
+import io.reactivex.disposables.Disposable;
 
 public class SelectTeamsActivity extends AppCompatActivity {
     public static final String HOME_TEAM_ID = "HOME_TEAM_ID";
     public static final String AWAY_TEAM_ID = "AWAY_TEAM_ID";
+    public static final String GAME_ID = "GAME_ID";
 
     private SelectTeamViewModel mViewModel;
     private ArrayAdapter<Team> mHomeArrayAdapter;
@@ -52,20 +55,49 @@ public class SelectTeamsActivity extends AppCompatActivity {
         Team selectedHomeTeam = (Team) homeTeamSpinner.getSelectedItem();
         Team selectedAwayTeam = (Team) awayTeamSpinner.getSelectedItem();
 
-        Intent setLineupIntent = new Intent(getApplicationContext(), SetLineupActivity.class);
-        setLineupIntent.putExtra(HOME_TEAM_ID, selectedHomeTeam.mTeamId);
-        setLineupIntent.putExtra(AWAY_TEAM_ID, -1);
-        startActivity(setLineupIntent);
+//        final Observer<Long> gameCreatedObserver = new Observer<Long>() {
+//            @Override
+//            public void onChanged(Long id) {
+//                startSetLineup(selectedHomeTeam, selectedAwayTeam, id);
+//            }
+//        };
 
-        setLineupIntent = new Intent(getApplicationContext(), SetLineupActivity.class);
-        setLineupIntent.putExtra(HOME_TEAM_ID, -1);
-        setLineupIntent.putExtra(AWAY_TEAM_ID, selectedAwayTeam.mTeamId);
-        startActivity(setLineupIntent);
+        final SingleObserver<Long> createGameObserver = new SingleObserver<Long>() {
+            @Override
+            public void onSubscribe(Disposable d) {
 
-        // Set Home Team Lineup -> Set Away Team Lineup
-        // Start Game
+            }
 
+            @Override
+            public void onSuccess(Long gameId) {
+                startSetLineup(selectedHomeTeam, selectedAwayTeam, gameId);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+        };
+
+        mViewModel.createGame(selectedHomeTeam.mTeamId, selectedAwayTeam.mTeamId, "arena")
+                .subscribe(createGameObserver);
+
+
+
+//        mViewModel.createGame(selectedHomeTeam.mTeamId, selectedAwayTeam.mTeamId, "arena").subscribe(
+//                id -> {
+//                    startSetLineup(selectedHomeTeam, selectedAwayTeam, id);
+//                });
 
     }
+
+    protected void startSetLineup(Team selectedHomeTeam, Team selectedAwayTeam, Long id) {
+        Intent setLineupIntent = new Intent(getApplicationContext(), SetLineupActivity.class);
+        setLineupIntent.putExtra(HOME_TEAM_ID, selectedHomeTeam.mTeamId);
+        setLineupIntent.putExtra(AWAY_TEAM_ID, selectedAwayTeam.mTeamId);
+        setLineupIntent.putExtra(GAME_ID, id);
+        startActivity(setLineupIntent);
+    }
+
 
 }

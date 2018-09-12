@@ -3,12 +3,16 @@ package com.scoreit.hockeyscorekeeper.viewmodel;
 import android.app.Application;
 
 import com.scoreit.hockeyscorekeeper.HockeyRepository;
+import com.scoreit.hockeyscorekeeper.model.Game;
+import com.scoreit.hockeyscorekeeper.model.GameShots;
 import com.scoreit.hockeyscorekeeper.model.Team;
 
+import java.util.Date;
 import java.util.List;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import io.reactivex.Single;
 
 public class SelectTeamViewModel extends AndroidViewModel {
     private HockeyRepository mRepository;
@@ -51,4 +55,13 @@ public class SelectTeamViewModel extends AndroidViewModel {
         return mAllTeams;
     }
 
+    public Single<Long> createGame(int homeTeamId, int awayTeamId, String arena) {
+        Date gameDate = new Date();
+        Game game = new Game(homeTeamId, awayTeamId, gameDate.toString(), arena);
+        return mRepository.addGame(game);
+    }
+
+    public void addGameShots(GameShots shots) {
+        mRepository.addGameShots(shots);
+    }
 }

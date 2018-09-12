@@ -1,5 +1,7 @@
 package com.scoreit.hockeyscorekeeper.data;
 
+import com.scoreit.hockeyscorekeeper.model.PenaltyType;
+
 import java.util.List;
 
 import androidx.room.Dao;
