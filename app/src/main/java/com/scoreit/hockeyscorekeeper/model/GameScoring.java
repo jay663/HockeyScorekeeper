@@ -8,7 +8,10 @@ import androidx.room.PrimaryKey;
 public class GameScoring {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    public int id;
+    public long id;
+
+    @ColumnInfo(name = "gameId")
+    public long gameId;
 
     @ColumnInfo(name = "teamId")
     public int teamId;
@@ -23,7 +26,7 @@ public class GameScoring {
     public int period;
 
     @ColumnInfo(name = "scoringPlayer")
-    public Integer scoringPlayerJersey;
+    public int scoringPlayerJersey;
 
     @ColumnInfo(name = "gameTime")
     public String gameTime;
@@ -34,10 +37,19 @@ public class GameScoring {
     @ColumnInfo(name = "secondaryAssistPlayer")
     public int secondaryAssistPlayer;
 
-    public GameScoring() {
+    public GameScoring(long gameId, int teamId, String homeOrAway, int period, int scoringPlayerJersey, String gameTime, int firstAssistPlayer, int secondaryAssistPlayer) {
+        this.gameId = gameId;
+        this.teamId = teamId;
+        this.homeOrAway = homeOrAway;
+        this.sequence = 0;
+        this.period = period;
+        this.scoringPlayerJersey = scoringPlayerJersey;
+        this.gameTime = gameTime;
+        this.firstAssistPlayer = firstAssistPlayer;
+        this.secondaryAssistPlayer = secondaryAssistPlayer;
     }
 
-    //    public GameScoring(int TeamId, String HomeOrAway, int Sequence,
+//    public GameScoring(int TeamId, String HomeOrAway, int Sequence,
 //                       int Period, int ScoringPlayerJersey, String GameTime,
 //                       int FirstAssistPlayer, int SecondaryAssistPlayer) {
 //        this.teamId = TeamId;

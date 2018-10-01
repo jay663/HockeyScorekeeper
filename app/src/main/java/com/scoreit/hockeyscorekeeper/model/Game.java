@@ -1,18 +1,19 @@
 package com.scoreit.hockeyscorekeeper.model;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-import androidx.annotation.NonNull;
 
 @Entity(tableName = "game_table")
 public class Game {
     @NonNull
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(@NonNull int id) {
+    public void setId(@NonNull long id) {
         this.id = id;
     }
 
@@ -64,89 +65,9 @@ public class Game {
         this.arena = arena;
     }
 
-    public int getHomePeriod1Goals() {
-        return homePeriod1Goals;
-    }
-
-    public void setHomePeriod1Goals(int homePeriod1Goals) {
-        this.homePeriod1Goals = homePeriod1Goals;
-    }
-
-    public int getHomePeriod2Goals() {
-        return homePeriod2Goals;
-    }
-
-    public void setHomePeriod2Goals(int homePeriod2Goals) {
-        this.homePeriod2Goals = homePeriod2Goals;
-    }
-
-    public int getHomePeriod3Goals() {
-        return homePeriod3Goals;
-    }
-
-    public void setHomePeriod3Goals(int homePeriod3Goals) {
-        this.homePeriod3Goals = homePeriod3Goals;
-    }
-
-    public int getHomeOTGoals() {
-        return homeOTGoals;
-    }
-
-    public void setHomeOTGoals(int homeOTGoals) {
-        this.homeOTGoals = homeOTGoals;
-    }
-
-    public int getHomeFinalScore() {
-        return homeFinalScore;
-    }
-
-    public void setHomeFinalScore(int homeFinalScore) {
-        this.homeFinalScore = homeFinalScore;
-    }
-
-    public int getAwayPeriod1Goals() {
-        return awayPeriod1Goals;
-    }
-
-    public void setAwayPeriod1Goals(int awayPeriod1Goals) {
-        this.awayPeriod1Goals = awayPeriod1Goals;
-    }
-
-    public int getAwayPeriod2Goals() {
-        return awayPeriod2Goals;
-    }
-
-    public void setAwayPeriod2Goals(int awayPeriod2Goals) {
-        this.awayPeriod2Goals = awayPeriod2Goals;
-    }
-
-    public int getAwayPeriod3Goals() {
-        return awayPeriod3Goals;
-    }
-
-    public void setAwayPeriod3Goals(int awayPeriod3Goals) {
-        this.awayPeriod3Goals = awayPeriod3Goals;
-    }
-
-    public int getAwayOTGoals() {
-        return awayOTGoals;
-    }
-
-    public void setAwayOTGoals(int awayOTGoals) {
-        this.awayOTGoals = awayOTGoals;
-    }
-
-    public int getAwayFinalScore() {
-        return awayFinalScore;
-    }
-
-    public void setAwayFinalScore(int awayFinalScore) {
-        this.awayFinalScore = awayFinalScore;
-    }
-
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    private int id;
+    private long id;
 
     @ColumnInfo(name = "homeTeamId")
     private int homeTeamId;
@@ -166,55 +87,22 @@ public class Game {
     @ColumnInfo(name = "arena")
     private String arena;
 
-    @ColumnInfo(name = "homePeriod1Goals")
-    private int homePeriod1Goals;
+    @Embedded
+    public Scoreboard scoreboard;
 
-    @ColumnInfo(name = "homePeriod2Goals")
-    private int homePeriod2Goals;
+    @ColumnInfo(name = "currentPeriod")
+    public int currentPeriod;
 
-    @ColumnInfo(name = "homePeriod3Goals")
-    private int homePeriod3Goals;
-
-    @ColumnInfo(name = "homeOTGoals")
-    private int homeOTGoals;
-
-    @ColumnInfo(name = "homeFinalScore")
-    private int homeFinalScore;
-
-    @ColumnInfo(name = "awayPeriod1Goals")
-    private int awayPeriod1Goals;
-
-    @ColumnInfo(name = "awayPeriod2Goals")
-    private int awayPeriod2Goals;
-
-    @ColumnInfo(name = "awayPeriod3Goals")
-    private int awayPeriod3Goals;
-
-    @ColumnInfo(name = "awayOTGoals")
-    private int awayOTGoals;
-
-    @ColumnInfo(name = "awayfinalScore")
-    private int awayFinalScore;
-
-    public Game(int homeTeamId, int awayTeamId, String gameDate, String arena) {
+    public Game(int homeTeamId, int awayTeamId, String awayTeam, String homeTeam, String gameDate, String arena) {
         this.homeTeamId = homeTeamId;
+        this.homeTeam = homeTeam;
         this.arena = arena;
         this.awayTeamId = awayTeamId;
+        this.awayTeam = awayTeam;
         this.gameDate = gameDate;
-        this.awayFinalScore = 0;
-        this.awayOTGoals = 0;
-        this.awayPeriod1Goals = 0;
-        this.awayPeriod2Goals = 0;
-        this.awayPeriod3Goals = 0;
-        this.homeFinalScore = 0;
-        this.homeOTGoals = 0;
-        this.homePeriod1Goals = 0;
-        this.homePeriod2Goals = 0;
-        this.homePeriod3Goals = 0;
+        this.scoreboard = new Scoreboard();
+        currentPeriod = 1;
     }
-
-    //public String getWord(){return this.mWord;}
-
 }
 
 

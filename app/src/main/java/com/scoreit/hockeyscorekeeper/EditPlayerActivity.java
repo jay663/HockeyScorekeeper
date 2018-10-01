@@ -43,7 +43,7 @@ public class EditPlayerActivity extends AppCompatActivity {
 
         mEditPlayerJersyLabel = findViewById(R.id.edit_player_jersey_number);
         mEditPlayerName = findViewById(R.id.edit_player_name);
-        mEditPlayerPositionSpinner = (Spinner) findViewById(R.id.edit_player_spinner_position);
+        mEditPlayerPositionSpinner = findViewById(R.id.edit_player_spinner_position);
         mPlayerViewModel = ViewModelProviders.of(this).get(PlayerViewModel.class);
         loadTeam(teamId, playerId);
     }

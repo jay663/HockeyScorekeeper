@@ -1,43 +1,57 @@
 package com.scoreit.hockeyscorekeeper.model;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
-import androidx.annotation.NonNull;
 
-@Entity(tableName = "game_penalties_table")
+import static androidx.room.ForeignKey.CASCADE;
+
+@Entity(tableName = "game_penalties_table",
+        indices = {@Index(value = {"gameId", "homeOrAway"})})
 public class GamePenalties {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    public long id;
+
     @NonNull
     @ColumnInfo(name = "jerseyNumber")
-    public int mJerseyNumber;
+    public int jerseyNumber;
 
-    @ColumnInfo(name = "period")
-    public int mPeriod;
-
-    @ColumnInfo(name = "teamId")
-    public int mTeamId;
+    @NonNull
+    @ForeignKey(entity = Game.class, parentColumns = "id", childColumns = "gameId", onDelete = CASCADE)
+    @ColumnInfo(name = "gameId")
+    public long gameId;
 
     @ColumnInfo(name = "homeOrAway")
-    public String mHomeOrAway;
+    public String homeOrAway;
+
+    @ColumnInfo(name = "period")
+    public int period;
+
+    @ColumnInfo(name = "teamId")
+    public int teamId;
 
     @ColumnInfo(name = "penalty")
-    public String mPenalty;
+    public String penalty;
 
     @ColumnInfo(name = "min")
-    public String mMinutes;
+    public String minutes;
 
     @ColumnInfo(name = "startTime")
-    public String mStartTime;
+    public String startTime;
 
-    public GamePenalties(int mPeriod, int mJerseyNumber, int mTeamId, String mHomeOrAway,
-                         String mPenalty, String mMinutes, String mStartTime) {
-        this.mPeriod = mPeriod;
-        this.mJerseyNumber = mJerseyNumber;
-        this.mTeamId = mTeamId;
-        this.mHomeOrAway = mHomeOrAway;
-        this.mPenalty = mPenalty;
-        this.mMinutes = mMinutes;
-        this.mStartTime = mStartTime;
+
+    public GamePenalties(int jerseyNumber, long gameId, String homeOrAway, int period, int teamId, String penalty, String minutes, String startTime) {
+        this.jerseyNumber = jerseyNumber;
+        this.gameId = gameId;
+        this.homeOrAway = homeOrAway;
+        this.period = period;
+        this.teamId = teamId;
+        this.penalty = penalty;
+        this.minutes = minutes;
+        this.startTime = startTime;
     }
 }

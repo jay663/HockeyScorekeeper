@@ -32,3 +32,12 @@ public class Lineup {
         this.mAwayorHome = mAwayorHome;
     }
 }
+
+/**
+ *  What will I need in the Lineup table
+ *  I suppose the lineup could be created and not be associated with a game
+ *  Typically you would want to associate a lineup with a game
+ *  I also need within a game to be able to do the following
+ *   - record the scoring of a player
+ *   - record the time that player was on the ice
+ */

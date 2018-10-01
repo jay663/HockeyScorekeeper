@@ -1,4 +1,4 @@
-package com.scoreit.hockeyscorekeeper;
+package com.scoreit.hockeyscorekeeper.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.scoreit.hockeyscorekeeper.R;
 import com.scoreit.hockeyscorekeeper.model.Team;
 
 import java.util.List;
@@ -109,8 +110,7 @@ public class TeamListAdapter extends RecyclerView.Adapter<TeamListAdapter.TeamVi
 
     }
 
-
-    void setTeams(List<Team> teams){
+    public void setTeams(List<Team> teams){
         mTeams = teams;
         notifyDataSetChanged();
     }

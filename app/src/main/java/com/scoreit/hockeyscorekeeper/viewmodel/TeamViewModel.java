@@ -2,10 +2,12 @@ package com.scoreit.hockeyscorekeeper.viewmodel;
 
 import android.app.Application;
 
-import com.scoreit.hockeyscorekeeper.HockeyRepository;
 import com.scoreit.hockeyscorekeeper.IAsyncTaskResults;
-import com.scoreit.hockeyscorekeeper.model.Player;
+import com.scoreit.hockeyscorekeeper.data.HockeyDatabase;
+import com.scoreit.hockeyscorekeeper.data.TeamDao;
 import com.scoreit.hockeyscorekeeper.model.Team;
+import com.scoreit.hockeyscorekeeper.repositories.TeamRepository;
+import com.scoreit.hockeyscorekeeper.repositories.TeamRepositoryImpl;
 
 import java.util.List;
 
@@ -15,23 +17,22 @@ import io.reactivex.Single;
 
 public class TeamViewModel extends AndroidViewModel {
 
-    private HockeyRepository mRepository;
-    private LiveData<List<Team>> mAllTeams;
+    private TeamRepository mRepository;
 
     public TeamViewModel (Application application) {
         super(application);
-        mRepository = new HockeyRepository(application);
-        mAllTeams = mRepository.getAllTeams();
+        TeamDao dao = HockeyDatabase.getDatabase(application).getTeamDao();
+        mRepository = new TeamRepositoryImpl(dao);
     }
 
-    public LiveData<List<Team>> getAllTeams() { return mAllTeams; }
+    public LiveData<List<Team>> getAllTeams() { return mRepository.getAllTeams(); }
 
     public LiveData<Team> getTeam(int teamId){
         return mRepository.getTeam(teamId);
     }
 
     public void insert(Team team, IAsyncTaskResults<Long> addTeamListener) {
-        mRepository.addTeamDelegate = addTeamListener;
+        mRepository.addOnClickListener(addTeamListener);
         mRepository.insert(team);
     }
 
@@ -43,11 +44,9 @@ public class TeamViewModel extends AndroidViewModel {
         return mRepository.addTeam(team);
     }
 
-    public void addPlayer(Player player) { mRepository.addPlayer(player); }
-
     public void deleteTeam(Team team) { mRepository.removeTeam(team);}
 
     public void removeListener(){
-        mRepository.addTeamDelegate = null;
+        mRepository.removeOnClickListener();
     }
 }

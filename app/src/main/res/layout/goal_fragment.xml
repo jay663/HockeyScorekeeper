@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GoalFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/goal_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Scoring Player"
+            android:textSize="18sp"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="50dp"/>
+
+        <Spinner
+            android:id="@+id/scoring_player_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/goal_label"
+            android:layout_alignLeft="@id/goal_label"
+            android:layout_marginTop="20dp"
+            android:spinnerMode="dropdown" />
+
+        <TextView
+            android:id="@+id/assist_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scoring_player_spinner"
+            android:layout_alignLeft="@id/scoring_player_spinner"
+            android:layout_marginTop="20dp"
+            android:spinnerMode="dropdown"
+            android:text="Assist"
+            android:textSize="18sp" />
+
+        <Spinner
+            android:id="@+id/assist_player_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/assist_label"
+            android:layout_alignLeft="@id/assist_label"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/secondary_assist_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/assist_player_spinner"
+            android:layout_alignLeft="@id/assist_player_spinner"
+            android:layout_marginTop="20dp"
+            android:text="Secondary Assist"
+            android:textSize="18sp" />
+
+        <Spinner
+            android:id="@+id/secondary_assist_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/secondary_assist_label"
+            android:layout_alignLeft="@id/secondary_assist_label"
+            android:layout_marginTop="20dp" />
+
+        <Button
+            android:id="@+id/save_goal_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/secondary_assist_spinner"
+            android:layout_alignLeft="@id/secondary_assist_spinner"
+            android:layout_marginTop="20dp"
+            android:text="Save" />
+
+        <Button
+            android:id="@+id/cancel_goal_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/secondary_assist_spinner"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/save_goal_button"
+            android:text="Cancel" />
+    </RelativeLayout>
+</FrameLayout>

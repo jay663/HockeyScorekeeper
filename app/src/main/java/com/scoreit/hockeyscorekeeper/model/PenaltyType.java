@@ -1,4 +1,4 @@
-package com.scoreit.hockeyscorekeeper.data;
+package com.scoreit.hockeyscorekeeper.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -17,6 +17,9 @@ public class PenaltyType {
 
     @ColumnInfo(name = "code")
     public String mPenaltyCode;
+
+    @ColumnInfo(name = "penaltyBoxMinutes")
+    public Long mPenaltyBoxMinutes;
 
 
     public PenaltyType(@NonNull String mPenalty, String mCategory) {

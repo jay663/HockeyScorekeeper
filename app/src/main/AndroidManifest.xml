@@ -35,9 +35,6 @@
             android:name=".TeamRosterActivity"
             android:label="@string/title_activity_team_roster"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".GoalDialogActivity"
-            android:theme="@android:style/Theme.Holo.Dialog" />
         <activity android:name=".EditTeamActivity" />
 
         <meta-data
@@ -59,7 +56,10 @@
         <activity
             android:name=".SetLineupActivity"
             android:label="@string/title_activity_set_lineup"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".PlayGameActivity"
+            android:label="PlayGameActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

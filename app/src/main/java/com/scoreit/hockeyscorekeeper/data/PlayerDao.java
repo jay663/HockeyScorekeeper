@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -15,6 +16,9 @@ import androidx.room.Update;
 public interface PlayerDao {
     @Insert
     void insert(Player player);
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertOnStartup(Player player);
 
     @Update
     void update(Player player);
@@ -30,4 +34,5 @@ public interface PlayerDao {
 
     @Query("SELECT * FROM player_table WHERE teamId = :teamId AND jerseyNumber = :playerId")
     LiveData<Player> getPlayer(int teamId, int playerId);
+
 }

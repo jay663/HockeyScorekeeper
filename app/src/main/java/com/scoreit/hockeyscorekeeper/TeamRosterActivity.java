@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.scoreit.hockeyscorekeeper.adapters.PlayerListAdapter;
 import com.scoreit.hockeyscorekeeper.model.Player;
 import com.scoreit.hockeyscorekeeper.viewmodel.PlayerViewModel;
 
@@ -41,7 +42,7 @@ public class TeamRosterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team_roster);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
 
         Intent intent = getIntent();
         mTeamId = intent.getIntExtra(EXTRA_PLAYER_TEAM_ID, -1);
@@ -55,8 +56,8 @@ public class TeamRosterActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mRecyclerView = findViewById(R.id.player_recycler_view);
-        FloatingActionButton addButton = (FloatingActionButton) findViewById(R.id.fab);
-        mBottomMenu = (BottomNavigationView)findViewById(R.id.roster_navigationView);
+        FloatingActionButton addButton = findViewById(R.id.fab);
+        mBottomMenu = findViewById(R.id.roster_navigationView);
         mAdapter = new PlayerListAdapter(this, mBottomMenu, addButton, mTeamId);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));

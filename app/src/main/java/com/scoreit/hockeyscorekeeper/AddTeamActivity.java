@@ -58,7 +58,7 @@ public class AddTeamActivity extends AppCompatActivity implements IAsyncTaskResu
 
 
     @Override
-    public void onTeamAdded(Long teamId) {
+    public void onItemAdded(Long teamId) {
         int id = teamId.intValue();
         mTeamViewModel.removeListener();
         Intent teamRosterIntent = new Intent(getApplicationContext(), TeamRosterActivity.class);

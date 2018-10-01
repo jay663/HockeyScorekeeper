@@ -13,7 +13,7 @@ import androidx.room.Update;
 @Dao
 public interface GameScoringDao {
     @Insert
-    void insertAll(GameScoring gameScoring);
+    long insertAll(GameScoring gameScoring);
 
     @Update
     void updateAll(GameScoring gameScoring);
@@ -22,5 +22,6 @@ public interface GameScoringDao {
     List<GameScoring> getAll();
 
     @Delete
-    void deleteAll(GameScoring gameScoring);    
+    void deleteAll(GameScoring gameScoring);
+
 }
