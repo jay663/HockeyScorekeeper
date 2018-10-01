@@ -1,4 +1,4 @@
-package com.scoreit.hockeyscorekeeper;
+package com.scoreit.hockeyscorekeeper.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.scoreit.hockeyscorekeeper.R;
 import com.scoreit.hockeyscorekeeper.model.Player;
 
 import java.util.List;
@@ -115,7 +116,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Pl
 
     }
 
-    void setPlayers(List<Player> players){
+    public void setPlayers(List<Player> players){
         mPlayers = players;
         notifyDataSetChanged();
     }

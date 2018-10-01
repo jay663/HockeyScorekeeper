@@ -10,7 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.scoreit.hockeyscorekeeper.databinding.ContentPlayGameBinding;
-import com.scoreit.hockeyscorekeeper.model.Goal;
+import com.scoreit.hockeyscorekeeper.model.GameScoring;
 import com.scoreit.hockeyscorekeeper.viewmodel.GameVM;
 
 import java.text.SimpleDateFormat;
@@ -18,6 +18,13 @@ import java.util.Date;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import static com.scoreit.hockeyscorekeeper.GoalFragment.ADD_GOAL_GAME_ID;
+import static com.scoreit.hockeyscorekeeper.GoalFragment.ADD_GOAL_HOME_OR_AWAY_ID;
+import static com.scoreit.hockeyscorekeeper.GoalFragment.ADD_GOAL_TEAM_ID;
+import static com.scoreit.hockeyscorekeeper.GoalFragment.ADD_GOAL_TIME;
 
 public class PlayGameActivity extends AppCompatActivity {
     public static final String GAME_ID = "GAME_ID";
@@ -52,12 +59,19 @@ public class PlayGameActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         mGameId = intent.getLongExtra(GAME_ID, -1);
-
         gameVM = new GameVM(mGameId, getApplication());
         gameClock = new HockeyGameClock(PERIOD_TIME, COUNTDOWN_INTERVAL);
 
+        gameClock.setTimeExpiredListener(new TimerExpiredListener() {
+            @Override
+            public void onTimerExpired(String source, boolean isManual) {
+                onPeriodEnds(source, isManual);
+            }
+        });
+
+
         ContentPlayGameBinding binding = DataBindingUtil.setContentView(this, R.layout.content_play_game);
-        binding.setStuff(gameVM);
+        binding.setVm(gameVM);
         binding.setClock(gameClock);
 
         tView = (TextView) findViewById(R.id.tv);
@@ -70,70 +84,59 @@ public class PlayGameActivity extends AppCompatActivity {
         btnPause.setEnabled(false);
         btnResume.setEnabled(false);
         btnCancel.setEnabled(false);
+
+        binding.setLifecycleOwner(this);
     }
     public void onHomeTeamScore(View view){
-        gameVM.homeTeamScored();
-//        int goals = 0;
-//
-//        switch (gameVM.game.getValue().currentPeriod){
-//            case 1:
-//                goals = gameVM.game.getValue().scoreboard.homePeriod1Goals + 1;
-//                gameVM.game.getValue().scoreboard.homePeriod1Goals = goals;
-//                break;
-//            case 2:
-//                goals = gameVM.game.getValue().scoreboard.homePeriod2Goals + 1;
-//                gameVM.game.getValue().scoreboard.homePeriod2Goals = goals;
-//                break;
-//            case 3:
-//                goals = gameVM.game.getValue().scoreboard.homePeriod3Goals + 1;
-//                gameVM.game.getValue().scoreboard.homePeriod3Goals = goals;
-//                break;
-//            case 4:
-//                goals = gameVM.game.getValue().scoreboard.homeOTGoals + 1;
-//                gameVM.game.getValue().scoreboard.homeOTGoals = goals;
-//                break;
-//        }
-//
-//        goals = gameVM.game.getValue().scoreboard.homeFinalScore + 1;
-//        gameVM.game.getValue().scoreboard.homeFinalScore = goals;
+        gameClock.pause();
+        String goalTime = gameClock.getClockDisplay();
 
+        TextView textView = (TextView)findViewById(R.id.home_team);
+        int teamId = (Integer)textView.getTag();
+
+        OpenGoalDialog(goalTime, teamId, "home");
+
+        // TODO: Add to Goal Fragment View Model
+        //gameVM.homeTeamScored();
     }
 
     public void onAwayTeamScore(View view){
-        int goals = 0;
+        gameClock.pause();
+        String goalTime = gameClock.getClockDisplay();
 
-        gameVM.awayTeamScored();
+        TextView textView = (TextView)findViewById(R.id.away_team);
+        int teamId = (Integer)textView.getTag();
 
-        switch (gameVM.game.getValue().currentPeriod){
-            case 1:
-                goals = gameVM.game.getValue().scoreboard.awayPeriod1Goals + 1;
-                gameVM.game.getValue().scoreboard.awayPeriod1Goals = goals;
-                break;
-            case 2:
-                goals = goals = gameVM.game.getValue().scoreboard.awayPeriod2Goals + 1;
-                gameVM.game.getValue().scoreboard.awayPeriod2Goals = goals;
-                break;
-            case 3:
-                goals = goals = gameVM.game.getValue().scoreboard.awayPeriod3Goals + 1;
-                gameVM.game.getValue().scoreboard.awayPeriod3Goals = goals;
-                break;
-            case 4:
-                goals = goals = gameVM.game.getValue().scoreboard.awayOTGoals + 1;
-                gameVM.game.getValue().scoreboard.awayOTGoals = goals;
-                break;
+        OpenGoalDialog(goalTime, teamId, "away");
+    }
+
+    protected void OpenGoalDialog(String goalTime, int teamId, String away) {
+        Bundle bundle = createGoalBundle(goalTime, teamId, away);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Fragment previousDialog = getSupportFragmentManager().findFragmentByTag("goalFragment");
+        if (previousDialog != null) {
+            transaction.remove(previousDialog);
         }
+        transaction.addToBackStack(null);
 
-        goals = gameVM.game.getValue().scoreboard.awayFinalScore + 1;
-        gameVM.game.getValue().scoreboard.awayFinalScore = goals;
+        GoalFragment fragment = new GoalFragment();
+        fragment.setArguments(bundle);
+        transaction.add(android.R.id.content, fragment, "goalFragment");
+        transaction.commit();
+    }
 
+    protected Bundle createGoalBundle(String goalTime, int teamId, String homeOrAway) {
+        homeOrAway = homeOrAway.toLowerCase();
+        Bundle bundle = new Bundle();
+        bundle.putLong(ADD_GOAL_GAME_ID, mGameId);
+        bundle.putInt(ADD_GOAL_TEAM_ID, teamId);
+        bundle.putString(ADD_GOAL_HOME_OR_AWAY_ID, homeOrAway);
+        bundle.putString(ADD_GOAL_TIME, goalTime);
+        return bundle;
     }
 
     public void onHomeTeamShot(View view){
-//        int x = gameVM.shots.getValue().homePeriod1Shots + 1;
-//        gameVM.shots.getValue().homePeriod1Shots = x;
-//
-//        x = gameVM.shots.getValue().homeShotTotal + 1;
-//        gameVM.shots.getValue().homeShotTotal = x;
         gameVM.addHomeTeamShot();
     }
 
@@ -156,7 +159,6 @@ public class PlayGameActivity extends AppCompatActivity {
         countDownInterval = COUNTDOWN_INTERVAL;
 
         gameClock.start();
-
     }
 
     public void onUpMinuteClicked(View view){
@@ -227,12 +229,11 @@ public class PlayGameActivity extends AppCompatActivity {
         gameClock.resume();
     }
 
-    public void onPeriodEnds(){
+    public void onPeriodEnds(String source, Boolean isManual){
         // When period ends update period, reset timer, and pause clock
-        if (!isGameFinished())
+        if (!gameVM.isGameOver())
         {
-            int nextPeriod = gameVM.game.getValue().currentPeriod + 1;
-            gameVM.game.getValue().currentPeriod = nextPeriod;
+            gameVM.addPeriod();
             this.gameClock.restart();
 
         }else {
@@ -247,19 +248,32 @@ public class PlayGameActivity extends AppCompatActivity {
         btnCancel.setEnabled(false);
     }
 
-    protected boolean isGameFinished(){
-//        int currentPeriod = gameVM.game.getValue().currentPeriod;
-//        int homeScore = gameVM.game.getValue().scoreboard.homeFinalScore;
-//        int awayScore = gameVM.game.getValue().scoreboard.awayFinalScore;
-//
-//        // Game Finishes after 3 periods and there is no tie
-//        if (currentPeriod == 3 && (homeScore != awayScore)){
-//            return true;
-//        }
-//
-//        return false;
-        return gameVM.isGameFinished();
+    /**
+     * Goal Fragment Methods
+     */
+    public void goalFragmentAwayScored(GameScoring scoring){
+        clearGoalFragment();
+        gameVM.awayTeamScored(scoring);
     }
+
+    public void goalFragmentHomeScored(GameScoring scoring){
+        clearGoalFragment();
+        gameVM.homeTeamScored(scoring);
+    }
+
+
+    public void goalFragmentCanceled(){
+        clearGoalFragment();
+    }
+
+    protected void clearGoalFragment(){
+        for (Fragment fragment:getSupportFragmentManager().getFragments()) {
+            if (fragment!=null) {
+                getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            }
+        }
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -270,8 +284,9 @@ public class PlayGameActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) { // Activity.RESULT_OK
 
                 // get goal data from Intent
-                Goal goal = (Goal) data.getExtras().getSerializable("GOAL_DETAILS");
+                //Goal goal = (Goal) data.getExtras().getSerializable("GOAL_DETAILS");
             }
         }
     }
+
 }

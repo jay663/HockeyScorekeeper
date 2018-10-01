@@ -32,4 +32,17 @@ public class Scoreboard {
 
     @ColumnInfo(name = "awayfinalScore")
     public int awayFinalScore;
+
+    public Scoreboard() {
+        this.homePeriod1Goals = 0;
+        this.homePeriod2Goals = 0;
+        this.homePeriod3Goals = 0;
+        this.homeOTGoals = 0;
+        this.homeFinalScore = 0;
+        this.awayPeriod1Goals = 0;
+        this.awayPeriod2Goals = 0;
+        this.awayPeriod3Goals = 0;
+        this.awayOTGoals = 0;
+        this.awayFinalScore = 0;
+    }
 }

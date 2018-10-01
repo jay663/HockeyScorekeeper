@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
-import androidx.room.Ignore;
 
 import static androidx.room.ForeignKey.CASCADE;
 
@@ -39,47 +38,5 @@ public class GameShots {
     public GameShots(long gameId) {
         this.gameId = gameId;
 
-    }
-
-    @Ignore
-    public void addAwayTeamShot(int curentPeriod) {
-        switch (curentPeriod) {
-            case 1:
-                awayPeriod1Shots++;
-                break;
-            case 2:
-                awayPeriod2Shots++;
-                break;
-            case 3:
-                awayPeriod3Shots++;
-                break;
-            case 4:
-                awayOTShots++;
-                break;
-            default:
-        }
-
-        awayShotTotal++;
-
-    }
-    @Ignore
-    public void addHomeTeamShot(int curentPeriod) {
-        switch (curentPeriod) {
-            case 1:
-                homePeriod1Shots++;
-                break;
-            case 2:
-                homePeriod2Shots++;
-                break;
-            case 3:
-                homePeriod3Shots++;
-                break;
-            case 4:
-                homeOTShots++;
-                break;
-            default:
-        }
-
-        homeShotTotal++;
     }
 }

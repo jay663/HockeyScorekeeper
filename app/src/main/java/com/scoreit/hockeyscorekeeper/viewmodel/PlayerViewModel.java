@@ -2,10 +2,12 @@ package com.scoreit.hockeyscorekeeper.viewmodel;
 
 import android.app.Application;
 
-import com.scoreit.hockeyscorekeeper.HockeyRepository;
+import com.scoreit.hockeyscorekeeper.data.HockeyDatabase;
+import com.scoreit.hockeyscorekeeper.data.PlayerDao;
 import com.scoreit.hockeyscorekeeper.model.Player;
+import com.scoreit.hockeyscorekeeper.repositories.PlayerRepository;
+import com.scoreit.hockeyscorekeeper.repositories.PlayerRepositoryImpl;
 
-import java.util.Arrays;
 import java.util.List;
 
 import androidx.lifecycle.AndroidViewModel;
@@ -13,8 +15,10 @@ import androidx.lifecycle.LiveData;
 
 public class PlayerViewModel extends AndroidViewModel {
 
-    private HockeyRepository mRepository;
+    private PlayerRepository mRepository;
     private LiveData<List<Player>> mPlayers;
+
+    /**
     Player players[] =
             {
                     new Player(8, 8, "Joe Granger", "C"),
@@ -57,28 +61,18 @@ public class PlayerViewModel extends AndroidViewModel {
                     new Player(35, 10, "Madden George", "G")
 
             };
+    **/
 
     public PlayerViewModel(Application application) {
         super(application);
-        mRepository = new HockeyRepository(application);
+        PlayerDao dao = HockeyDatabase.getDatabase(application).getPlayerDao();
+        mRepository = new PlayerRepositoryImpl(dao);
         mPlayers = mRepository.getAllPlayers();
     }
 
     public LiveData<List<Player>> getTeamPlayers(int teamId) { return mRepository.getTeamPlayers(teamId); }
 
     public void insert(Player player) { mRepository.addPlayer(player); }
-
-    public List<Player> getPlayersByTeam(int teamId){
-        List<Player> teamPlayers = Arrays.asList(players);
-        teamPlayers.clear();
-        for (Player player : players) {
-            if (player.mTeamId == teamId)
-            {
-                teamPlayers.add(player);
-            }
-        }
-        return teamPlayers;
-    }
 
     public void deletePlayer(Player player) {
         mRepository.removePlayer(player);

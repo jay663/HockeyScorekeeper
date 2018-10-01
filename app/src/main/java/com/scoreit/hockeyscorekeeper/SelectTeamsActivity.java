@@ -79,7 +79,8 @@ public class SelectTeamsActivity extends AppCompatActivity {
             }
         };
 
-        mViewModel.createGame(selectedHomeTeam.mTeamId, selectedAwayTeam.mTeamId, "arena")
+        mViewModel.createGame(selectedHomeTeam.mTeamId, selectedHomeTeam.mTeamName,
+                selectedAwayTeam.mTeamId, selectedAwayTeam.mTeamName, "arena")
                 .subscribe(createGameObserver);
 
 

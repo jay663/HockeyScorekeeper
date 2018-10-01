@@ -19,6 +19,12 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/play_game_frame_layout">
 
-    <include layout="@layout/content_play_game" />
+        <include layout="@layout/content_play_game" />
+    </FrameLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

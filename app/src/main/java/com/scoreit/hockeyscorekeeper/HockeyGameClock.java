@@ -19,6 +19,7 @@ public class HockeyGameClock extends BaseObservable {
     private long initialTimerMilliseconds;
 
     public CountDownTimer timer;
+    private TimerExpiredListener listener;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
 
@@ -28,8 +29,16 @@ public class HockeyGameClock extends BaseObservable {
 
     public void setTimeRemaining(long timeRemaining) {
         this.timeRemaining = timeRemaining;
+        String source = Thread.currentThread().getStackTrace()[1].getMethodName();
         notifyPropertyChanged(BR.clockDisplay);
 
+        if(listener != null && timeRemaining == 0){
+            listener.onTimerExpired(source, !source.equals("onTick"));
+        }
+    }
+
+    public void setTimeExpiredListener(TimerExpiredListener listener) {
+        this.listener = listener;
     }
 
     @Bindable
@@ -65,6 +74,7 @@ public class HockeyGameClock extends BaseObservable {
         initialTimerMilliseconds = millisInFuture;
         setTimeRemaining(millisInFuture);
         timer = setupTimer(millisInFuture, countDownInterval);
+        this.listener = null;
     }
 
     protected CountDownTimer setupTimer(final long millisInFuture, final long countDownInterval) {

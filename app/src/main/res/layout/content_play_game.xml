@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".PlayGameActivity"
-    tools:showIn="@layout/activity_play_game">
+    tools:showIn="@layout/activity_play_game"
+    >
 
     <data>
         <variable
-            name="stuff"
+            name="vm"
             type="com.scoreit.hockeyscorekeeper.viewmodel.GameVM" />
         <variable
             name="clock"
@@ -16,7 +17,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="5dp">
+        android:layout_margin="5dp" android:id="@+id/play_game_constraintlayout">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/left_guideline"
@@ -134,7 +135,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv" />
 
         <ImageButton
-            android:id="@+id/ibtn_up_min"
+            android:id="@+id/btn_up_min"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="80dp"
@@ -146,7 +147,7 @@
             app:srcCompat="@android:drawable/arrow_up_float" />
 
         <ImageButton
-            android:id="@+id/ibtn_down_min"
+            android:id="@+id/btn_down_min"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -156,7 +157,7 @@
             app:layout_constraintEnd_toStartOf="@+id/tv"
             app:layout_constraintHorizontal_bias="0.987"
             app:layout_constraintStart_toStartOf="@+id/left_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/ibtn_up_min"
+            app:layout_constraintTop_toBottomOf="@+id/btn_up_min"
             app:srcCompat="@android:drawable/arrow_down_float" />
 
 
@@ -165,17 +166,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginTop="192dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:columnCount="7"
             android:orientation="vertical"
             android:padding="10dp"
             android:rowCount="3"
             android:stretchColumns="*"
             app:layout_constraintEnd_toStartOf="@+id/right_guideline"
-            app:layout_constraintHorizontal_bias="0.045"
+            app:layout_constraintHorizontal_bias="0.04"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -192,14 +191,16 @@
                 android:layout_width="65dp"
                 android:layout_height="20dp"
                 android:layout_columnSpan="2"
-                android:text="@{stuff.game.HomeTeam}" />
+                android:text="@{vm.game.HomeTeam}"
+                android:tag="@{vm.game.HomeTeamId}"/>
 
             <TextView
                 android:id="@+id/away_team"
                 android:layout_width="65dp"
                 android:layout_height="20dp"
                 android:layout_columnSpan="2"
-                android:text="@{stuff.game.AwayTeam}" />
+                android:text="@{vm.game.AwayTeam}"
+                android:tag="@{vm.game.AwayTeamId}"/>
 
             <TextView
                 android:id="@+id/lbl_period1"
@@ -212,13 +213,13 @@
                 android:id="@+id/home_team_per_1_goals"
                 android:layout_width="26dp"
                 android:layout_gravity="center"
-                android:text="@{String.valueOf(stuff.game.scoreboard.homePeriod1Goals)}" />
+                android:text="@{String.valueOf(vm.game.scoreboard.homePeriod1Goals)}" />
 
             <TextView
                 android:id="@+id/away_team_per_1_goals"
                 android:layout_width="28dp"
                 android:layout_gravity="center"
-                android:text="@{String.valueOf(stuff.game.scoreboard.awayPeriod1Goals)}" />
+                android:text="@{String.valueOf(vm.game.scoreboard.awayPeriod1Goals)}" />
 
             <TextView
                 android:id="@+id/lbl_period2"
@@ -231,13 +232,13 @@
                 android:id="@+id/home_team_per_2_goals"
                 android:layout_width="26dp"
                 android:layout_gravity="center"
-                android:text="@{String.valueOf(stuff.game.scoreboard.homePeriod2Goals)}" />
+                android:text="@{String.valueOf(vm.game.scoreboard.homePeriod2Goals)}" />
 
             <TextView
                 android:id="@+id/away_team_per_2_goals"
                 android:layout_width="30dp"
                 android:layout_gravity="center"
-                android:text="@{String.valueOf(stuff.game.scoreboard.awayPeriod2Goals)}" />
+                android:text="@{String.valueOf(vm.game.scoreboard.awayPeriod2Goals)}" />
 
             <TextView
                 android:id="@+id/lbl_period3"
@@ -250,13 +251,13 @@
                 android:id="@+id/home_team_per_3_goals"
                 android:layout_width="26dp"
                 android:layout_gravity="center"
-                android:text="@{String.valueOf(stuff.game.scoreboard.homePeriod3Goals)}" />
+                android:text="@{String.valueOf(vm.game.scoreboard.homePeriod3Goals)}" />
 
             <TextView
                 android:id="@+id/away_team_per_3_goals"
                 android:layout_width="26dp"
                 android:layout_gravity="center"
-                android:text="@{String.valueOf(stuff.game.scoreboard.awayPeriod3Goals)}" />
+                android:text="@{String.valueOf(vm.game.scoreboard.awayPeriod3Goals)}" />
 
             <TextView
                 android:id="@+id/lbl_ot"
@@ -269,13 +270,13 @@
                 android:id="@+id/home_team_ot_goals"
                 android:layout_width="26dp"
                 android:layout_gravity="center"
-                android:text="@{String.valueOf(stuff.game.scoreboard.homeOTGoals)}" />
+                android:text="@{String.valueOf(vm.game.scoreboard.homeOTGoals)}" />
 
             <TextView
                 android:id="@+id/away_team_ot_goals"
                 android:layout_width="26dp"
                 android:layout_gravity="center"
-                android:text="@{String.valueOf(stuff.game.scoreboard.awayOTGoals)}" />
+                android:text="@{String.valueOf(vm.game.scoreboard.awayOTGoals)}" />
 
 
             <TextView
@@ -289,14 +290,14 @@
                 android:id="@+id/home_team_total_goals"
                 android:layout_width="26dp"
                 android:layout_gravity="center"
-                android:text="@{String.valueOf(stuff.game.scoreboard.homeFinalScore)}" />
+                android:text="@{String.valueOf(vm.game.scoreboard.homeFinalScore)}" />
 
             <TextView
                 android:id="@+id/away_team_total_goals"
                 android:layout_width="26dp"
                 android:layout_height="20dp"
                 android:layout_gravity="center"
-                android:text="@{String.valueOf(stuff.game.scoreboard.awayFinalScore)}" />
+                android:text="@{String.valueOf(vm.game.scoreboard.awayFinalScore)}" />
 
 
         </GridLayout>
@@ -360,14 +361,14 @@
                 android:layout_width="65dp"
                 android:layout_height="20dp"
                 android:layout_columnSpan="2"
-                android:text="@{stuff.game.HomeTeam}" />
+                android:text="@{vm.game.HomeTeam}" />
 
             <TextView
                 android:id="@+id/away_team_shots"
                 android:layout_width="65dp"
                 android:layout_height="20dp"
                 android:layout_columnSpan="2"
-                android:text="@{String.valueOf(stuff.game.AwayTeam)}" />
+                android:text="@{vm.game.AwayTeam}" />
 
             <TextView
                 android:id="@+id/lbl_period1_shots"
@@ -380,13 +381,13 @@
                 android:id="@+id/home_team_per_1_shots"
                 android:layout_width="26dp"
                 android:layout_gravity="center"
-                android:text="@{String.valueOf(stuff.shots.homePeriod1Shots)}" />
+                android:text="@{String.valueOf(vm.shots.homePeriod1Shots)}" />
 
             <TextView
                 android:id="@+id/away_team_per_1_shots"
                 android:layout_width="28dp"
                 android:layout_gravity="center"
-                android:text="@{String.valueOf(stuff.shots.awayPeriod1Shots)}" />
+                android:text="@{String.valueOf(vm.shots.awayPeriod1Shots)}" />
 
             <TextView
                 android:id="@+id/lbl_period2_shots"
@@ -399,13 +400,13 @@
                 android:id="@+id/home_team_per_2_shots"
                 android:layout_width="26dp"
                 android:layout_gravity="center"
-                android:text="@{String.valueOf(stuff.shots.homePeriod2Shots)}" />
+                android:text="@{String.valueOf(vm.shots.homePeriod2Shots)}" />
 
             <TextView
                 android:id="@+id/away_team_per_2_shots"
                 android:layout_width="30dp"
                 android:layout_gravity="center"
-                android:text="@{String.valueOf(stuff.shots.awayPeriod2Shots)}" />
+                android:text="@{String.valueOf(vm.shots.awayPeriod2Shots)}" />
 
             <TextView
                 android:id="@+id/lbl_period3_shots"
@@ -418,13 +419,13 @@
                 android:id="@+id/home_team_per_3_shots"
                 android:layout_width="26dp"
                 android:layout_gravity="center"
-                android:text="@{String.valueOf(stuff.shots.homePeriod3Shots)}" />
+                android:text="@{String.valueOf(vm.shots.homePeriod3Shots)}" />
 
             <TextView
                 android:id="@+id/away_team_per_3_shots"
                 android:layout_width="26dp"
                 android:layout_gravity="center"
-                android:text="@{String.valueOf(stuff.shots.awayPeriod3Shots)}" />
+                android:text="@{String.valueOf(vm.shots.awayPeriod3Shots)}" />
 
             <TextView
                 android:id="@+id/lbl_ot_shots"
@@ -437,13 +438,13 @@
                 android:id="@+id/home_team_ot_shots"
                 android:layout_width="26dp"
                 android:layout_gravity="center"
-                android:text="@{String.valueOf(stuff.shots.homeOTShots)}" />
+                android:text="@{String.valueOf(vm.shots.homeOTShots)}" />
 
             <TextView
                 android:id="@+id/away_team_ot_shots"
                 android:layout_width="26dp"
                 android:layout_gravity="center"
-                android:text="@{String.valueOf(stuff.shots.awayOTShots)}" />
+                android:text="@{String.valueOf(vm.shots.awayOTShots)}" />
 
 
             <TextView
@@ -457,14 +458,14 @@
                 android:id="@+id/home_team_total_shots"
                 android:layout_width="26dp"
                 android:layout_gravity="center"
-                android:text="@{String.valueOf(stuff.shots.homeShotTotal)}" />
+                android:text="@{String.valueOf(vm.shots.homeShotTotal)}" />
 
             <TextView
                 android:id="@+id/away_team_total_shots"
                 android:layout_width="26dp"
                 android:layout_height="20dp"
                 android:layout_gravity="center"
-                android:text="@{String.valueOf(stuff.shots.awayShotTotal)}" />
+                android:text="@{String.valueOf(vm.shots.awayShotTotal)}" />
 
 
         </GridLayout>
@@ -520,7 +521,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:gravity="center_vertical|center_horizontal"
-            android:text="@{String.valueOf(stuff.game.currentPeriod)}"
+            android:text="@{String.valueOf(vm.game.currentPeriod)}"
             app:layout_constraintEnd_toStartOf="@+id/right_guideline"
             app:layout_constraintStart_toEndOf="@+id/ibtn_down_sec"
             app:layout_constraintTop_toBottomOf="@+id/lbl_period" />

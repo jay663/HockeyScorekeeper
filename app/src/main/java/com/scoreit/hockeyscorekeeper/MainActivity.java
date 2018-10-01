@@ -25,27 +25,16 @@ public class MainActivity extends AppCompatActivity {
         mTeamViewModel = ViewModelProviders.of(this).get(TeamViewModel.class);
     }
 
-    protected void onStartGameBtnClick(View view){
+    public void onStartGameBtnClick(View view){
         // Game needs 2 teams to start
         List<Team> teams = mTeamViewModel.getAllTeams().getValue();
 
         startActivity(new Intent(getApplicationContext(), SelectTeamsActivity.class));
 
-//        if (teams == null || teams.size() < 2){
-//            startActivity(new Intent(getApplicationContext(), ListOfTeamsActivity.class));
-//        }else {
-//            startActivity(new Intent(getApplicationContext(), SelectTeamsActivity.class));
-//        }
 
-        /**
-         *  Steps To Game:
-         *  Select Teams
-         *  Set Rosters
-         *  Set 
-         **/
     }
 
-    protected void onAddTeamBtnClick(View view){
+    public void onAddTeamBtnClick(View view){
         startActivity(new Intent(getApplicationContext(), ListOfTeamsActivity.class));
 
     }

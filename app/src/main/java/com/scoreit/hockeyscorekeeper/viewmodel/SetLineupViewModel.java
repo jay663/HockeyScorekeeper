@@ -4,13 +4,22 @@ import android.app.Application;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
-import com.scoreit.hockeyscorekeeper.HockeyRepository;
-import com.scoreit.hockeyscorekeeper.PlayerArrayAdapter;
 import com.scoreit.hockeyscorekeeper.R;
+import com.scoreit.hockeyscorekeeper.adapters.PlayerArrayAdapter;
+import com.scoreit.hockeyscorekeeper.data.GameLineupDao;
+import com.scoreit.hockeyscorekeeper.data.HockeyDatabase;
+import com.scoreit.hockeyscorekeeper.data.PlayerDao;
+import com.scoreit.hockeyscorekeeper.data.TeamDao;
 import com.scoreit.hockeyscorekeeper.model.GameLineup;
 import com.scoreit.hockeyscorekeeper.model.LineupStatus;
 import com.scoreit.hockeyscorekeeper.model.Player;
 import com.scoreit.hockeyscorekeeper.model.Team;
+import com.scoreit.hockeyscorekeeper.repositories.GameLineupRepository;
+import com.scoreit.hockeyscorekeeper.repositories.GameLineupRepositoryImpl;
+import com.scoreit.hockeyscorekeeper.repositories.PlayerRepository;
+import com.scoreit.hockeyscorekeeper.repositories.PlayerRepositoryImpl;
+import com.scoreit.hockeyscorekeeper.repositories.TeamRepository;
+import com.scoreit.hockeyscorekeeper.repositories.TeamRepositoryImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +28,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 public class SetLineupViewModel extends AndroidViewModel {
-    private HockeyRepository mRepository;
+    private GameLineupRepository mGameLineupRepository;
+    private TeamRepository mTeamRepository;
+    private PlayerRepository mPlayerRepository;
+
     private LiveData<List<Player>> mPlayers;
     private int mTeamId;
     private boolean mIsSettingHomeLineup;
@@ -40,6 +52,33 @@ public class SetLineupViewModel extends AndroidViewModel {
     private PlayerArrayAdapter mLDArrayAdapter;
     private PlayerArrayAdapter mRDArrayAdapter;
     private PlayerArrayAdapter mGArrayAdapter;
+
+
+    public SetLineupViewModel(Application application) {
+        super(application);
+        HockeyDatabase db = HockeyDatabase.getDatabase(application);
+        TeamDao teamDao = db.getTeamDao();
+        PlayerDao playerDao = db.getPlayerDao();
+        GameLineupDao lineupDao = db.getGameLineupDao();
+
+        mTeamRepository = new TeamRepositoryImpl(teamDao);
+        mPlayerRepository = new PlayerRepositoryImpl(playerDao);
+        mGameLineupRepository = new GameLineupRepositoryImpl(lineupDao);
+    }
+
+    public void initialize(int homeTeamId, int awayTeamId, long gameId) {
+        setHomeTeamId(homeTeamId);
+        setAwayTeamId(awayTeamId);
+        setGameId(gameId);
+
+        if(mHomeTeamId > -1){
+            setTeamId(homeTeamId);
+            setIsSettingHomeLineup(true);
+        }else{
+            setTeamId(awayTeamId);
+            setIsSettingHomeLineup(false);
+        }
+    }
 
     public boolean isSettingHomeLineup() {
         return mIsSettingHomeLineup;
@@ -121,25 +160,6 @@ public class SetLineupViewModel extends AndroidViewModel {
         this.mGArrayAdapter = mGArrayAdapter;
     }
 
-    public SetLineupViewModel(Application application) {
-        super(application);
-        mRepository = new HockeyRepository(application);
-    }
-
-    public void initialize(int homeTeamId, int awayTeamId, long gameId) {
-        setHomeTeamId(homeTeamId);
-        setAwayTeamId(awayTeamId);
-        setGameId(gameId);
-
-        if(mHomeTeamId > -1){
-            setTeamId(homeTeamId);
-            setIsSettingHomeLineup(true);
-        }else{
-            setTeamId(awayTeamId);
-            setIsSettingHomeLineup(false);
-        }
-    }
-
     public int getTeamId() {
         return mTeamId;
     }
@@ -197,11 +217,11 @@ public class SetLineupViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Player>> getTeamPlayers(){
-        return mRepository.getTeamPlayers(mTeamId);
+        return mPlayerRepository.getTeamPlayers(mTeamId);
     }
 
     public LiveData<Team> getTeam(){
-        return mRepository.getTeam(mTeamId);
+        return mTeamRepository.getTeam(mTeamId);
     }
 
     public void filter(Player player, ArrayAdapter<Player> arrayAdapter, Player selectedPlayer) {
@@ -340,20 +360,20 @@ public class SetLineupViewModel extends AndroidViewModel {
         }
 
         ArrayList lineup = new ArrayList();
-        GameLineup lineupEntry = new GameLineup(mGameId, mLW.mJerseyNumber, mTeamId, "LW", "", homeOrAway, LineupStatus.ON_ICE);
+        GameLineup lineupEntry = new GameLineup(mGameId, mLW.mJerseyNumber, mTeamId, "LW", "1", homeOrAway, LineupStatus.ON_ICE, mLW.mPlayerName);
         lineup.add(lineupEntry);
-        lineupEntry = new GameLineup(mGameId, mCenter.mJerseyNumber, mTeamId, "", "C", homeOrAway, LineupStatus.ON_ICE);
+        lineupEntry = new GameLineup(mGameId, mCenter.mJerseyNumber, mTeamId, "C", "1", homeOrAway, LineupStatus.ON_ICE, mCenter.mPlayerName);
         lineup.add(lineupEntry);
-        lineupEntry = new GameLineup(mGameId, mRW.mJerseyNumber, mTeamId, "", "RW", homeOrAway, LineupStatus.ON_ICE);
+        lineupEntry = new GameLineup(mGameId, mRW.mJerseyNumber, mTeamId, "RW", "1", homeOrAway, LineupStatus.ON_ICE, mRW.mPlayerName);
         lineup.add(lineupEntry);
-        lineupEntry = new GameLineup(mGameId, mLD.mJerseyNumber, mTeamId, "", "LD", homeOrAway, LineupStatus.ON_ICE );
+        lineupEntry = new GameLineup(mGameId, mLD.mJerseyNumber, mTeamId, "LD", "1", homeOrAway, LineupStatus.ON_ICE, mLD.mPlayerName );
         lineup.add(lineupEntry);
-        lineupEntry = new GameLineup(mGameId, mRD.mJerseyNumber, mTeamId, "", "RD", homeOrAway, LineupStatus.ON_ICE);
+        lineupEntry = new GameLineup(mGameId, mRD.mJerseyNumber, mTeamId, "RD", "1", homeOrAway, LineupStatus.ON_ICE, mRD.mPlayerName);
         lineup.add(lineupEntry);
-        lineupEntry = new GameLineup(mGameId, mGoalie.mJerseyNumber, mTeamId, "", "G", homeOrAway, LineupStatus.ON_ICE);
+        lineupEntry = new GameLineup(mGameId, mGoalie.mJerseyNumber, mTeamId, "G", "1", homeOrAway, LineupStatus.ON_ICE, mGoalie.mPlayerName);
         lineup.add(lineupEntry);
 
-        mRepository.addGameLineup(lineup);
+        mGameLineupRepository.addGameLineup(lineup);
     }
 
 

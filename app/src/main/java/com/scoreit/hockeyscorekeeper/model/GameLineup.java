@@ -17,12 +17,17 @@ public class GameLineup {
     public long mGameId;
 
     @NonNull
+    @ForeignKey(entity = Team.class, parentColumns = "teamId", childColumns = "teamId")
     @ColumnInfo(name = "teamId")
     public int mTeamId;
 
     @NonNull
+    @ForeignKey(entity = Player.class, parentColumns = "jerseyNumber", childColumns = "jerseyNumber")
     @ColumnInfo(name = "jerseyNumber")
     public int mJerseyNumber;
+
+    @ColumnInfo(name = "playerName")
+    public String mPlayerName;
 
     @NonNull
     @ColumnInfo(name = "awayOrHome")
@@ -47,7 +52,7 @@ public class GameLineup {
     @ColumnInfo(name = "power_play_toi")
     public Long mPowerPlayTOI;
 
-    public GameLineup(long mGameId, int mJerseyNumber, int mTeamId, String mPosition, String mLine, String mAwayorHome, String mStatus) {
+    public GameLineup(long mGameId, int mJerseyNumber, int mTeamId, String mPosition, String mLine, String mAwayorHome, String mStatus, String playerName) {
         this.mGameId = mGameId;
         this.mTeamId = mTeamId;
         this.mJerseyNumber = mJerseyNumber;
@@ -58,6 +63,7 @@ public class GameLineup {
         mTimeOnIce = 0L;
         mEvenStrengthTimeOnIce = 0L;
         mPowerPlayTOI = 0L;
+        mPlayerName = playerName;
     }
 }
 

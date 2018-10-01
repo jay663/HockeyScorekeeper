@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.scoreit.hockeyscorekeeper.adapters.PlayerArrayAdapter;
 import com.scoreit.hockeyscorekeeper.model.Player;
 import com.scoreit.hockeyscorekeeper.viewmodel.SetLineupViewModel;
 
@@ -107,7 +108,6 @@ public class SetLineupActivity extends AppCompatActivity implements AdapterView.
         }
 
     }
-
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {

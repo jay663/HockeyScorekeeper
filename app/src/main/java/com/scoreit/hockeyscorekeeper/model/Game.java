@@ -1,11 +1,10 @@
 package com.scoreit.hockeyscorekeeper.model;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-import androidx.annotation.NonNull;
 
 @Entity(tableName = "game_table")
 public class Game {
@@ -94,59 +93,15 @@ public class Game {
     @ColumnInfo(name = "currentPeriod")
     public int currentPeriod;
 
-    public Game(int homeTeamId, int awayTeamId, String gameDate, String arena) {
+    public Game(int homeTeamId, int awayTeamId, String awayTeam, String homeTeam, String gameDate, String arena) {
         this.homeTeamId = homeTeamId;
+        this.homeTeam = homeTeam;
         this.arena = arena;
         this.awayTeamId = awayTeamId;
+        this.awayTeam = awayTeam;
         this.gameDate = gameDate;
-    }
-
-    @Ignore
-    public void addHomeTeamGoal() {
-        switch (currentPeriod) {
-            case 1:
-                scoreboard.homePeriod1Goals++;
-                break;
-            case 2:
-                scoreboard.homePeriod2Goals++;
-                break;
-            case 3:
-                scoreboard.homePeriod3Goals++;
-                break;
-            case 4:
-                scoreboard.homeOTGoals++;
-                break;
-            default:
-        }
-
-        scoreboard.homeFinalScore++;
-    }
-
-    @Ignore
-    public void addAwayTeamGoal() {
-        switch (currentPeriod) {
-            case 1:
-                scoreboard.awayPeriod1Goals++;
-                break;
-            case 2:
-                scoreboard.awayPeriod2Goals++;
-                break;
-            case 3:
-                scoreboard.awayPeriod3Goals++;
-                break;
-            case 4:
-                scoreboard.awayOTGoals++;
-                break;
-            default:
-        }
-
-        scoreboard.awayFinalScore++;
-    }
-
-    @Ignore
-    public boolean isGameFinished() {
-        // Game Finishes after 3 periods and there is no tie
-        return (currentPeriod >= 3 && (scoreboard.homeFinalScore != scoreboard.awayFinalScore));
+        this.scoreboard = new Scoreboard();
+        currentPeriod = 1;
     }
 }
 
