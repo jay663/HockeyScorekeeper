@@ -7,7 +7,10 @@ import com.scoreit.hockeyscorekeeper.GoalFragment;
 import com.scoreit.hockeyscorekeeper.PlayGameActivity;
 import com.scoreit.hockeyscorekeeper.R;
 import com.scoreit.hockeyscorekeeper.adapters.PlayerArrayAdapter;
+import com.scoreit.hockeyscorekeeper.data.GameDao;
 import com.scoreit.hockeyscorekeeper.data.GameLineupDao;
+import com.scoreit.hockeyscorekeeper.data.GameScoringDao;
+import com.scoreit.hockeyscorekeeper.data.GameShotsDao;
 import com.scoreit.hockeyscorekeeper.data.HockeyDatabase;
 import com.scoreit.hockeyscorekeeper.model.GameScoring;
 import com.scoreit.hockeyscorekeeper.model.Player;
@@ -65,9 +68,15 @@ public class GoalViewModel extends AndroidViewModel {
 
     public GoalViewModel(Application application) {
         super(application);
-        mRepository = new GameRepository(application);
-        GameLineupDao dao = HockeyDatabase.getDatabase(application).getGameLineupDao();
-        mGameLineupRepository = new GameLineupRepositoryImpl(dao);
+        HockeyDatabase db = HockeyDatabase.getDatabase(application);
+        GameDao gameDao = db.getGameDao();
+        GameScoringDao gameScoringDao = db.getGameScoringDao();
+        GameShotsDao gameShotDao = db.getGameShotsDao();
+        GameLineupDao gameLineupDao = db.getGameLineupDao();
+
+
+        mRepository = new GameRepository(gameDao, gameScoringDao, gameShotDao);
+        mGameLineupRepository = new GameLineupRepositoryImpl(gameLineupDao);
     }
 
     public void initialize(long gameId, int teamId, String homeOrAway, String gameTime, int currentPeriod) {
