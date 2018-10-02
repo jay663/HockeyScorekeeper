@@ -10,8 +10,6 @@ import com.scoreit.hockeyscorekeeper.model.Game;
 import com.scoreit.hockeyscorekeeper.model.GameScoring;
 import com.scoreit.hockeyscorekeeper.model.GameShots;
 import com.scoreit.hockeyscorekeeper.repositories.GameRepository;
-import com.scoreit.hockeyscorekeeper.repositories.TeamRepository;
-import com.scoreit.hockeyscorekeeper.repositories.TeamRepositoryImpl;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
@@ -27,7 +25,7 @@ public class GameVM extends ViewModel {
         GameScoringDao scoringDao = db.getGameScoringDao();
         GameDao gameDao = db.getGameDao();
 
-        mRepository = new GameRepository(application);
+        mRepository = new GameRepository(gameDao, scoringDao, shotsDao);
         game = mRepository.getGame(id);
         shots = mRepository.getGameShots(id);
 
@@ -86,8 +84,8 @@ public class GameVM extends ViewModel {
         }
 
         hockeyGame.scoreboard.homeFinalScore++;
-        mRepository.addGameScoring(scoring);
-        mRepository.updateGame(hockeyGame);
+        mRepository.addGoal(hockeyGame, scoring);
+        addHomeTeamShot();
     }
 
     private void addAwayTeamGoal(Game hockeyGame, GameScoring scoring) {
@@ -108,8 +106,8 @@ public class GameVM extends ViewModel {
         }
 
         hockeyGame.scoreboard.awayFinalScore++;
-        mRepository.addGameScoring(scoring);
-        mRepository.updateGame(hockeyGame);
+        mRepository.addGoal(hockeyGame, scoring);
+        addAwayTeamShot();
     }
 
     private void addAwayTeamShot(int curentPeriod, GameShots gameShots) {
@@ -153,6 +151,5 @@ public class GameVM extends ViewModel {
         gameShots.homeShotTotal++;
         mRepository.updateGameShots(gameShots);
     }
-
 
 }

@@ -1,12 +1,10 @@
 package com.scoreit.hockeyscorekeeper.repositories;
 
-import android.app.Application;
 import android.os.AsyncTask;
 
 import com.scoreit.hockeyscorekeeper.data.GameDao;
 import com.scoreit.hockeyscorekeeper.data.GameScoringDao;
 import com.scoreit.hockeyscorekeeper.data.GameShotsDao;
-import com.scoreit.hockeyscorekeeper.data.HockeyDatabase;
 import com.scoreit.hockeyscorekeeper.model.Game;
 import com.scoreit.hockeyscorekeeper.model.GameScoring;
 import com.scoreit.hockeyscorekeeper.model.GameShots;
@@ -19,42 +17,16 @@ import io.reactivex.schedulers.Schedulers;
 
 public class GameRepository {
     private GameDao mGameDao;
-    private GameShotsDao mGameShotsDao;
     private GameShotsRepository mGameShotsRepository;
-    private GameScoringDao mGameScoringDao;
-    private HockeyDatabase mDb;
+    private GameScoringRepository mGameScoringRepository;
 
-    public GameRepository(Application application) {
-        HockeyDatabase db = HockeyDatabase.getDatabase(application);
-        mGameDao = db.getGameDao();
-        mGameShotsDao = db.getGameShotsDao();
-        mGameShotsRepository = new GameShotsRepositoryImpl(mGameShotsDao);
+    public GameRepository(GameDao gameDao, GameScoringDao scoringDao, GameShotsDao shotsDao) {
+        mGameDao = gameDao;
+
+        mGameShotsRepository = new GameShotsRepositoryImpl(shotsDao);
+        mGameScoringRepository = new GameScoringRepositoryImpl(scoringDao);
 
     }
-
-//    public LiveData<List<Team>> getGameReadyTeams() {
-//        LiveData<List<RosterCount>> eligibleRosters = mRosterCountDao.eligibleTeamIds(5);
-//
-//        LiveData<List<Team>> teams = Transformations.switchMap(eligibleRosters,
-//                new Function<List<RosterCount>, LiveData<List<Team>>>() {
-//                    @Override
-//                    public LiveData<List<Team>> apply(List<RosterCount> input) {
-//                        int[] teamIds = new int[input.size()];
-//
-//                        for (int i=0; i<input.size();i++){
-//                            teamIds[i] = input.get(i).teamId;
-//                        }
-//
-//                        return mTeamDao.getGameEligibleTeams(teamIds);
-//                    }
-//                });
-//
-//        return teams;
-//    }
-
-//    public LiveData<Team> getTeam (int teamId) {
-//        return mTeamRepository.getTeam(teamId);
-//    }
 
     /*
      *  Game Operations
@@ -81,21 +53,16 @@ public class GameRepository {
     }
 
     public LiveData<GameShots> getGameShots(long id) {
-        return mGameShotsDao.getGameShots(id);
+        return mGameShotsRepository.getGameShots(id);
     }
 
     public void updateGameShots(GameShots gameShots) {
-        new updateAsyncGameShots(mGameShotsDao, gameShots).execute();
+        mGameShotsRepository.updateGameShots(gameShots);
     }
 
-    public Single<Long> addGameScoring(GameScoring goal) {
-        return Single.fromCallable(new Callable<Long>() {
-            @Override
-            public Long call() throws Exception {
-                long gameId = mGameScoringDao.insertAll(goal);
-                return new Long(gameId);
-            }
-        }).subscribeOn(Schedulers.io());
+    public void addGoal(Game hockeyGame, GameScoring scoring) {
+        mGameScoringRepository.addGameScoring(scoring);
+        updateGame(hockeyGame);
     }
 
     private static class updateAsyncGame extends AsyncTask<Void, Void, Boolean> {
@@ -116,35 +83,4 @@ public class GameRepository {
 
     }
 
-    private static class addAsyncGameShots extends AsyncTask<Void, Void, Boolean> {
-        private GameShotsDao mAsyncTaskDao;
-        private GameShots mGameShots;
-
-        addAsyncGameShots(GameShotsDao dao, GameShots gameshots) {
-            mAsyncTaskDao = dao;
-            mGameShots = gameshots;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params){
-            mAsyncTaskDao.insert(mGameShots);
-            return true;
-        }
-    }
-
-    private static class updateAsyncGameShots extends AsyncTask<Void, Void, Boolean> {
-        private GameShotsDao mAsyncTaskDao;
-        private GameShots mGameShots;
-
-        updateAsyncGameShots(GameShotsDao dao, GameShots gameshots) {
-            mAsyncTaskDao = dao;
-            mGameShots = gameshots;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params){
-            mAsyncTaskDao.update(mGameShots);
-            return true;
-        }
-    }
 }

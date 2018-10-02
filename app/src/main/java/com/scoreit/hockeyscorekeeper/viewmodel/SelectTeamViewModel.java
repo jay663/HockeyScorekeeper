@@ -2,6 +2,9 @@ package com.scoreit.hockeyscorekeeper.viewmodel;
 
 import android.app.Application;
 
+import com.scoreit.hockeyscorekeeper.data.GameDao;
+import com.scoreit.hockeyscorekeeper.data.GameScoringDao;
+import com.scoreit.hockeyscorekeeper.data.GameShotsDao;
 import com.scoreit.hockeyscorekeeper.data.HockeyDatabase;
 import com.scoreit.hockeyscorekeeper.data.RosterCountDao;
 import com.scoreit.hockeyscorekeeper.data.TeamDao;
@@ -22,41 +25,24 @@ import io.reactivex.Single;
 
 public class SelectTeamViewModel extends AndroidViewModel {
     private EligibleTeamsRepository mRepository;
-    private LiveData<List<Team>> mAllTeams;
     private GameRepository mGameRepository;
 
     private Team mHomeTeam;
     private Team mAwayTeam;
 
-    Team[] teams = {
-            new Team("Lakers", "Cleveland", "Lakers"),
-            new Team("Seagulls", "Baltimore", "Seagulls"),
-            new Team("Nashville Grapes", "Grapes", "Nashville")};
-
-
-    public Team getHomeTeam() {
-        return mHomeTeam;
-    }
-
-    public void setHomeTeam(Team mHomeTeam) {
-        this.mHomeTeam = mHomeTeam;
-    }
-
-    public Team getAwayTeam() {
-        return mAwayTeam;
-    }
-
-    public void setAwayTeam(Team mAwayTeam) {
-        this.mAwayTeam = mAwayTeam;
-    }
 
     public SelectTeamViewModel(Application application) {
         super(application);
-        RosterCountDao rosterDao = HockeyDatabase.getDatabase(application).getRosterCountDao();
-        TeamDao teamDao = HockeyDatabase.getDatabase(application).getTeamDao();
+        HockeyDatabase db = HockeyDatabase.getDatabase(application);
+        RosterCountDao rosterDao = db.getRosterCountDao();
+        TeamDao teamDao = db.getTeamDao();
+        GameDao gameDao = db.getGameDao();
+        GameScoringDao gameScoringDao = db.getGameScoringDao();
+        GameShotsDao gameShotDao = db.getGameShotsDao();
+
         TeamRepository teamRepository = new TeamRepositoryImpl(teamDao);
         mRepository = new EligibleTeamsRepositoryImpl(teamRepository, rosterDao);
-        mGameRepository = new GameRepository(application);
+        mGameRepository = new GameRepository(gameDao, gameScoringDao, gameShotDao);
 
 
         mAwayTeam = null;
@@ -65,7 +51,7 @@ public class SelectTeamViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Team>> getAllTeams() {
-        mAllTeams = mRepository.getGameReadyTeams();
+        LiveData<List<Team>> mAllTeams = mRepository.getGameReadyTeams();
         return mAllTeams;
     }
 
